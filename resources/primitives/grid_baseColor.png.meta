@@ -1,0 +1,8 @@
+{
+	"profiles": {
+		"default": {
+			"compression": "BC1",
+			"sRGB": false
+		}
+	}
+}

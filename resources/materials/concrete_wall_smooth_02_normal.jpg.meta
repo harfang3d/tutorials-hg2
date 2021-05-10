@@ -1,0 +1,10 @@
+{
+	"profiles": {
+		"default": {
+			"compression": "BC5",
+			"mag-filter": "Anisotropic",
+			"min-filter": "Anisotropic",
+			"type": "NormalMap"
+		}
+	}
+}

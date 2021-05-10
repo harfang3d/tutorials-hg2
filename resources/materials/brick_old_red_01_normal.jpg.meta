@@ -1,0 +1,10 @@
+{
+	"profiles": {
+		"default": {
+			"compression": "ETC1",
+			"mag-filter": "Anisotropic",
+			"min-filter": "Anisotropic",
+			"type": "NormalMap"
+		}
+	}
+}
