@@ -1,10 +1,12 @@
 $input v_texcoord0
 
-#include <bgfx_shader.sh>
-#include <sao_common.sh>
+#include <forward_pipeline.sh>
 
+SAMPLER2D(u_attr0, 0);
 SAMPLER2D(u_input, 1);
 SAMPLER2D(u_depth_half, 2);
+
+uniform vec4 u_params[2];
 
 void main() {
     float a = 0.25;
@@ -15,15 +17,15 @@ void main() {
         vec4(1,3,3,9)
     );
 
-    float depth = linear_depth(texture2D(u_input, v_texcoord0).r);
+    float depth = LinearDepth(texture2D(u_input, v_texcoord0).r);
 
     vec4 offset = floor((gl_FragCoord.xyxy + vec4( 1, 1,-1,-1)) / 2.0) * u_params[0].xyxy;
 
     vec4 source;
-    source.x = texture2D(u_depth, offset.zw).r;
-    source.y = texture2D(u_depth, offset.zy).r;
-    source.z = texture2D(u_depth, offset.xw).r;
-    source.w = texture2D(u_depth, offset.xy).r;
+    source.x = texture2D(u_attr0, offset.zw).w;
+    source.y = texture2D(u_attr0, offset.zy).w;
+    source.z = texture2D(u_attr0, offset.xw).w;
+    source.w = texture2D(u_attr0, offset.xy).w;
 
     vec4 half_res;
     half_res.x = texture2D(u_depth_half, offset.zw).r;

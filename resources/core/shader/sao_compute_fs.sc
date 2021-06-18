@@ -8,7 +8,6 @@ SAMPLER2D(u_noise, 2);
 
 uniform vec4 u_params[2];
 
-#define u_offset u_params[0].xy
 #define u_radius u_params[1].x
 #define u_sample_count floatBitsToUint(u_params[1].w)
 #define u_distance_scale u_params[1].y
@@ -26,8 +25,10 @@ void main() {
 
 	vec4 jitter = texture2D(u_noise, mod(gl_FragCoord.xy, vec2(64, 64)) / vec2(64, 64));
 
+	vec2 attr0_size = vec2(textureSize(u_attr0, 0).xy);
+
 	// view space fragment coord
-	vec2 uv = gl_FragCoord.xy / uResolution.xy;
+	vec2 uv = gl_FragCoord.xy / attr0_size;
 	vec4 attr0 = texture2D(u_attr0, uv);
 
 	vec3 c = v_viewRay * attr0.w;
@@ -49,7 +50,7 @@ void main() {
 		if (any(lessThan(q_coord, u_viewRect.xy)) || any(greaterThan(q_coord, u_viewRect.xy + u_viewRect.zw))) {
 			ao += 1.;
 		} else {
-			vec2 q_uv = q_coord / uResolution.xy;
+			vec2 q_uv = q_coord / attr0_size;
 			float q_z = texture2D(u_attr0, q_uv).w;
 
 			vec3 q = ComputeFragCoordViewRay(q_coord) * q_z;

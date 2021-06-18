@@ -20,14 +20,14 @@ void main() {
 
 	vec2 z;
 	if(all(bvec4(greaterThanEqual(coord, viewport.xy), lessThan(coord, viewport.xy + viewport.zw)))) {
-#if BGFX_SHADER_LANGUAGE_GLSL	
-		z = 2.0 * texelFetch(u_depth, tex_coord, 0).xx - vec2_splat(1.0);
-#else
-		z = texelFetch(u_depth, tex_coord, 0).xx;
-#endif
+		z = texelFetch(u_depth, tex_coord, 0).ww;
+
 		// [todo] use the backface depth buffer instead
-		z.y = (u_zBounds.x * u_zBounds.y / (u_zBounds.y - (u_zBounds.y - u_zBounds.x) * z.y)) + 0.1; // [todo] make it a parameter
-		z.y = u_zBounds.y * (1. - u_zBounds.x / z.y) / (u_zBounds.y - u_zBounds.x);
+		z.y += 0.1;
+
+		// Store logarithmic depth
+		z.x = u_zBounds.y * z.x / ((u_zBounds.y - u_zBounds.x) * z.x + u_zBounds.x*u_zBounds.y);
+		z.y = u_zBounds.y * z.y / ((u_zBounds.y - u_zBounds.x) * z.y + u_zBounds.x*u_zBounds.y);
 	} else {
 		// Set pixels outside the viewport to the far clipping distance.
 		z = vec2(1.0, 0.0);

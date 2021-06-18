@@ -5,7 +5,7 @@
 #		define uv_ratio vec2_splat(uAAAParams[0].x)
 #	endif
 
-vec2 NDCToViewRect(vec2 xy) { return ((xy * 0.5 + 0.5) * u_viewRect.zw + u_viewRect.xy) * uv_ratio; }
+vec2 NDCToViewRect(vec2 xy) { return ((xy * 0.5 + 0.5) * u_viewRect.zw + u_viewRect.xy); }
 
 vec2 GetVelocityVector(in vec2 uv) {
 #if BGFX_SHADER_LANGUAGE_GLSL

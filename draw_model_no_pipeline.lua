@@ -31,6 +31,9 @@ while not hg.ReadKeyboard():Key(hg.K_Escape) do
 
 	hg.Frame()
 	hg.UpdateWindow(win)
+
+	-- prevent GC bottleneck 
+	collectgarbage()	
 end
 
 hg.RenderShutdown()

@@ -30,7 +30,7 @@ vec3 intersect_cell_boundary(vec3 pos, vec3 dir, vec2 cell, vec2 cell_count, vec
 // textureSize(sampler, level) should be used.
 // Unfortunately bgfx directx implementation always returns the size of level 0.
 vec2 mip_size(int level) {
-	return u_depthTexInfos.xy / ((level != 0) ? exp2(level) : 1.0);
+	return floor(u_depthTexInfos.xy / ((level != 0) ? exp2(level) : 1.0));
 }
 
 bool hiz_trace(vec3 ray_o, vec3 ray_d, mat4 proj, float z_near, int max_iterations, out vec3 ray) {
@@ -39,24 +39,27 @@ bool hiz_trace(vec3 ray_o, vec3 ray_d, mat4 proj, float z_near, int max_iteratio
 	vec3 viewport_max = vec3((u_viewRect.xy + u_viewRect.zw) * viewport_scale, 1.);
 
 	int level_max = int(u_depthTexInfos.w);
-	ivec2 iterations = ivec2(0, int(u_depthTexInfos.z));
+	int level_min = int(u_depthTexInfos.z);
+	ivec2 iterations = ivec2(0, level_min);
 	
+	vec2 cell_count = mip_size(level_min);
+
 	// clip to the near plane
 	float ray_len = (ray_o.z + ray_d.z * 1000.0) < z_near ? (z_near - ray_o.z) / ray_d.z : 1000.0;
 	vec3 end_point = ray_o + ray_d * ray_len;
-	
+
 	// project into homogeneous clip space
 	vec4 h0 = mul(proj, vec4(ray_o, 1.));
 	vec4 h1 = mul(proj, vec4(end_point, 1.));
-	
+
 	// screen-space endpoints
 	vec3 p0 = h0.xyz / h0.w;
 	p0.y *= -1.;
-	p0.xy = NDCToViewRect(p0.xy) / u_depthTexInfos.xy;
+	p0.xy = NDCToViewRect(p0.xy) / cell_count.xy;
 
 	vec3 p1 = h1.xyz / h1.w;
 	p1.y *= -1.;
-	p1.xy = NDCToViewRect(p1.xy) / u_depthTexInfos.xy;
+	p1.xy = NDCToViewRect(p1.xy) / cell_count.xy;
 
 	// compute ray start position and direction in screen space
 	vec3 pos = p0;
@@ -69,10 +72,10 @@ bool hiz_trace(vec3 ray_o, vec3 ray_d, mat4 proj, float z_near, int max_iteratio
 
 	vec4 cross_step;
 	cross_step.xy = step(vec2_splat(0.0), dir.xy);
-	cross_step.zw = (2.0 * cross_step.xy - vec2_splat(1.0)) * vec2_splat(0.5) / u_depthTexInfos.xy;
+	cross_step.zw = (2.0 * cross_step.xy - vec2_splat(1.0)) * vec2_splat(0.5) / cell_count.xy;
 	
-	vec2 cell_count = mip_size(iterations.y);
 	vec2 cell = floor(pos.xy * cell_count);
+	pos.xy = cell / cell_count + vec2_splat(0.25) / cell_count.xy;
 
 	ray = intersect_cell_boundary(pos, dir, cell, cell_count, cross_step);
 
@@ -88,16 +91,16 @@ bool hiz_trace(vec3 ray_o, vec3 ray_d, mat4 proj, float z_near, int max_iteratio
         cell = floor(ray.xy * cell_count);
          
         vec2 z_interval = texelFetch(u_depthTex, ivec2(cell), iterations.y).xy;
-        
+
         vec3 tmp = ray;
         float dz = z_interval.x - ray.z;
         if (dz > 0) {
-        tmp = ray + dz * sign(dir.z) * dir / dir.z;
+        	tmp = ray + dz * sign(dir.z) * dir / dir.z;
         }
         else {
             dz = ray.z - z_interval.y;
             if (dz > 0) {
-                tmp = ray + dz *  sign(dir.z) * dir / dir.z;
+                tmp = ray + dz * sign(dir.z) * dir / dir.z;
             }
         }
         vec2 new_cell = floor(tmp.xy * cell_count);
@@ -105,7 +108,7 @@ bool hiz_trace(vec3 ray_o, vec3 ray_d, mat4 proj, float z_near, int max_iteratio
 			tmp = intersect_cell_boundary(ray, dir, cell, cell_count, cross_step);
 			iterations.y = min(level_max, iterations.y + 2);
 		}
-		else if ((iterations.y == 1) && (abs(dz) > 0.0001)) {
+		else if ((iterations.y == (level_min+1)) && (dz > 0.00001)) {
 			tmp = intersect_cell_boundary(ray, dir, cell, cell_count, cross_step);
 			iterations.y = 2;
 		}
@@ -122,9 +125,9 @@ bool TraceScreenRay(vec3 ray_o, vec3 ray_d, mat4 proj, float z_near, int max_ite
 	if (hiz_trace(ray_o, ray_d, proj, z_near, max_iterations, ray)) {
 		// compute screen position of the hit pixel
 #if BGFX_SHADER_LANGUAGE_GLSL
-		hit_pixel = vec2(ray.x, 1.0 - ray.y) * u_depthTexInfos.xy;
+		hit_pixel = vec2(ray.x, 1.0 - ray.y) * floor(uResolution.xy / uv_ratio);
 #else
-		hit_pixel = ray.xy * u_depthTexInfos.xy;
+		hit_pixel = ray.xy * floor(uResolution.xy / uv_ratio);
 #endif
 
 		// and its world space coordinates

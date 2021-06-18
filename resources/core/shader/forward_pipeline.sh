@@ -29,7 +29,7 @@ uniform mat4 uMainInvProjection; // inverse projection for the main render (used
 uniform mat4 uPreviousViewProjection;
 uniform mat4 uPreviousModel[BGFX_CONFIG_MAX_BONES];
 uniform mat4 uViewProjUnjittered;
-uniform vec4 uAAAParams[2]; // [0].x: ssgi ratio, [0].y: ssr ratio, [0].z: temporal AA weight, [0].w: motion blur strength, [1].x: exposure, [1].y: 1/gamma
+uniform vec4 uAAAParams[2]; // [0].x: ssgi ratio, [0].y: ssr ratio, [0].z: temporal AA weight, [0].w: motion blur strength, [1].x: exposure, [1].y: 1/gamma, [1].z: sample count, [1].w: max radius
 
 uniform mat4 uMainInvView; // inversion view matrix
 
@@ -47,8 +47,12 @@ SAMPLER2DSHADOW(uLinearShadowMap, 14);
 SAMPLER2DSHADOW(uSpotShadowMap, 15);
 
 //
+float sRGB2linear(float v) {
+	return (v < 0.04045) ? (v * 0.0773993808) : pow((v + 0.055) / 1.055, 2.4);
+}
+
 vec3 sRGB2linear(vec3 v) {
-	return any(lessThanEqual(v, vec3_splat(0.04045))) ? v * 0.0773993808 : pow((v + 0.055) / 1.055, vec3_splat(2.4));
+	return vec3(sRGB2linear(v.x), sRGB2linear(v.y), sRGB2linear(v.z));
 }
 
 //

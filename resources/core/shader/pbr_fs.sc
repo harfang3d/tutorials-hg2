@@ -37,7 +37,7 @@ float SampleShadowPCF(sampler2DShadow map, vec4 coord, float inv_pixel_size, flo
 	float k = 0.0;
 
 #if FORWARD_PIPELINE_AAA
-	#define PCF_SAMPLE_COUNT 3.0 // 3x3
+	#define PCF_SAMPLE_COUNT 2.0 // 3x3
 
 	for (float j = 0.0; j <= PCF_SAMPLE_COUNT; ++j) {
 		float v = (j + jitter.y) / PCF_SAMPLE_COUNT * 2.0 - 1.0;
