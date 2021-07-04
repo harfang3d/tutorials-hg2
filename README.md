@@ -3,6 +3,8 @@
 These **tutorials** demonstrate the usage of the HARFANG 2.0 API in **Python** and **Lua**.
 If you want to know more about HARFANG, please visit the [official website](https://www.harfang3d.com).
 
+To **run the tutorials**, please follow the **instructions** here : https://www.harfang3d.com/docs/2.0.111/man.quickstart/
+
 ## Screenshots
 * AAA Rendering Pipeline
 ![AAA rendering pipeline](screenshots/aaa.png)
