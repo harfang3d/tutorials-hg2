@@ -50,7 +50,7 @@ cube_node.SetRigidBody(rb)
 cube_node.SetCollision(0, collision)
 
 # scene physics
-physics = hg.SceneNewtonPhysics()
+physics = hg.SceneBullet3Physics()
 physics.SceneCreatePhysicsFromAssets(scene)
 
 # main loop

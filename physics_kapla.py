@@ -87,9 +87,9 @@ cam_pos = hg.Vec3(28.3, 31.8, 26.9)
 cam_rot = hg.Vec3(0.6, -2.38, 0)
 
 # setup physics
-physics = hg.SceneNewtonPhysics()
+physics = hg.SceneBullet3Physics()
 physics.SceneCreatePhysicsFromAssets(scene)
-physics_step = hg.time_from_sec_f(1 / 50)
+physics_step = hg.time_from_sec_f(1 / 60)
 
 # main loop
 while not keyboard.Down(hg.K_Escape):
@@ -106,7 +106,7 @@ while not keyboard.Down(hg.K_Escape):
 	if keyboard.Pressed(hg.K_Space):
 		node = hg.CreatePhysicSphere(scene, 0.5, hg.TranslationMat4(cam_pos), sphere_ref, [mat_spheres], 0.5)
 		physics.NodeCreatePhysicsFromAssets(node)
-		physics.NodeAddImpulse(node, hg.GetZ(cam.GetTransform().GetWorld()) * 50.0, cam_pos, physics_step)
+		physics.NodeAddImpulse(node, hg.GetZ(cam.GetTransform().GetWorld()) * 25.0, cam_pos)
 
 	hg.SceneUpdateSystems(scene, clocks, dt, physics, physics_step, 1)
 	hg.SubmitSceneToPipeline(0, scene, hg.IntRect(0, 0, res_x, res_y), True, pipeline, res)

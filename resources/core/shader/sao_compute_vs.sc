@@ -13,5 +13,5 @@ void main() {
 	ndc /= ndc.w;
 	ndc /= ndc.z;
 
-	v_viewRay = ndc;
+	v_viewRay = ndc.xyz;
 }

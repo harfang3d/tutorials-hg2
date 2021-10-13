@@ -41,7 +41,7 @@ ground_node = hg.CreatePhysicCube(scene, hg.Vec3(100, 0.02, 100), hg.Translation
 clocks = hg.SceneClocks()
 
 -- scene physics
-physics = hg.SceneNewtonPhysics()
+physics = hg.SceneBullet3Physics()
 physics:SceneCreatePhysicsFromAssets(scene)
 
 -- main loop

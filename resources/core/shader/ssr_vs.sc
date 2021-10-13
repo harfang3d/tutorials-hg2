@@ -1,5 +1,5 @@
 $input a_position, a_texcoord0
-$output v_viewRay
+$output vTexCoord0, v_viewRay
 
 #include <forward_pipeline.sh>
 
@@ -14,4 +14,6 @@ void main() {
 	ndc /= ndc.z;
 
 	v_viewRay = ndc.xyz;
+
+	vTexCoord0 = a_texcoord0;
 }

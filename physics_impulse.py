@@ -6,7 +6,7 @@ hg.InputInit()
 hg.WindowSystemInit()
 
 res_x, res_y = 1280, 720
-win = hg.RenderInit('Harfang - Physics Impulse', res_x, res_y, hg.RF_VSync | hg.RF_MSAA4X)
+win = hg.RenderInit('Harfang - Physics Force/Impulse (Press space to alternate)', res_x, res_y, hg.RF_VSync | hg.RF_MSAA4X)
 
 pipeline = hg.CreateForwardPipeline()
 res = hg.PipelineResources()
@@ -32,32 +32,50 @@ scene.SetCurrentCamera(cam)
 
 lgt = hg.CreateLinearLight(scene, hg.TransformationMat4(hg.Vec3(0, 0, 0), hg.Vec3(hg.Deg(30), hg.Deg(59), 0)), hg.Color(1, 1, 1), hg.Color(1, 1, 1), 10, hg.LST_Map, 0.002, hg.Vec4(2, 4, 10, 16))
 
-cube_node = hg.CreatePhysicCube(scene, hg.Vec3(1, 1, 1), hg.TranslationMat4(hg.Vec3(0, 2.5, 0)), cube_ref, [mat], 2)
+cube_node = hg.CreatePhysicCube(scene, hg.Vec3(1, 1, 1), hg.TranslationMat4(hg.Vec3(0, 1.5, 0)), cube_ref, [mat], 2)
 ground_node = hg.CreatePhysicCube(scene, hg.Vec3(100, 0.02, 100), hg.TranslationMat4(hg.Vec3(0, -0.005, 0)), ground_ref, [mat], 0)
 
 clocks = hg.SceneClocks()
 
 # scene physics
-physics = hg.SceneNewtonPhysics()
+physics = hg.SceneBullet3Physics()
 physics.SceneCreatePhysicsFromAssets(scene)
-physics_step = hg.time_from_sec_f(1 / 30)
+physics_step = hg.time_from_sec_f(1 / 60)
 
 # main loop
 keyboard = hg.Keyboard()
+
+use_force = True
 
 while not keyboard.Down(hg.K_Escape):
 	keyboard.Update()
 
 	dt = hg.TickClock()
 
-	if keyboard.Pressed(hg.K_I):
-		world_pos = hg.GetT(cube_node.GetTransform().GetWorld())
-		physics.NodeAddImpulse(cube_node, hg.Vec3(0, 2, 0), world_pos, physics_step)
-	if keyboard.Pressed(hg.K_F):
-		world_pos = hg.GetT(cube_node.GetTransform().GetWorld())
-		physics.NodeAddForce(cube_node, hg.Vec3(0, 2, 0), world_pos)
+	if keyboard.Pressed(hg.K_Space):
+		use_force = not use_force
 
-	hg.SceneUpdateSystems(scene, clocks, dt, physics, physics_step, 1000)
+	world_pos = hg.GetT(cube_node.GetTransform().GetWorld())
+	dist_to_ground = world_pos.y - 0.5
+
+	if dist_to_ground < 1.0:
+		k = -(dist_to_ground - 1.0)
+
+		if use_force:
+			F = hg.Vec3(0, 1, 0) * k * 80  # apply a force inversely proportional to the distance to the ground
+			physics.NodeAddForce(cube_node, F, world_pos)
+		else:
+			stiffness = 10
+
+			cur_velocity = physics.NodeGetLinearVelocity(cube_node)
+			tgt_velocity = hg.Vec3(0, 1, 0) * k * stiffness  # compute a velocity that brings us to 1 meter above the ground
+
+			I = tgt_velocity - cur_velocity  # an impulse is an instantaneous change in velocity
+			physics.NodeAddImpulse(cube_node, I, world_pos)
+
+	physics.NodeWake(cube_node)
+
+	hg.SceneUpdateSystems(scene, clocks, dt, physics, physics_step, 3)
 	hg.SubmitSceneToPipeline(0, scene, hg.IntRect(0, 0, res_x, res_y), True, pipeline, res)
 
 	hg.Frame()

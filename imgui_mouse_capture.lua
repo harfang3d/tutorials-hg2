@@ -35,7 +35,7 @@ while not hg.ReadKeyboard():Key(hg.K_Escape) do
 		end
 	end
 
-	hg.SetView2D(0, res_x, res_y, -1, 0, hg.CF_Color | hg.CF_Depth, clear_color, 1, 0)
+	hg.SetView2D(0, 0, 0, res_x, res_y, -1, 0, hg.CF_Color | hg.CF_Depth, clear_color, 1, 0)
 
 	hg.ImGuiSetNextWindowPosCenter(hg.ImGuiCond_Once)
 	hg.ImGuiSetNextWindowSize(hg.Vec2(700, 96), hg.ImGuiCond_Once)

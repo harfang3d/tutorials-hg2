@@ -4,7 +4,17 @@ $output vWorldPos, vNormal, vTexCoord0, vTexCoord1, vTangent, vBinormal, vLinear
 #include <forward_pipeline.sh>
 
 mat3 normal_mat(mat4 m) {
-	return mat3(normalize(m[0].xyz), normalize(m[1].xyz), normalize(m[2].xyz));
+#if BGFX_SHADER_LANGUAGE_GLSL
+	vec3 u = normalize(vec3(m[0].x, m[1].x, m[2].x));
+	vec3 v = normalize(vec3(m[0].y, m[1].y, m[2].y));
+	vec3 w = normalize(vec3(m[0].z, m[1].z, m[2].z));
+#else
+	vec3 u = normalize(m[0].xyz);
+	vec3 v = normalize(m[1].xyz);
+	vec3 w = normalize(m[2].xyz);
+#endif
+
+	return mtxFromRows(u, v, w);
 }
 
 void main() {

@@ -59,7 +59,7 @@ hg.CreatePhysicCube(scene, hg.Vec3(32, 11, 1), hg.TranslationMat4(hg.Vec3(0, -0.
 clocks = hg.SceneClocks()
 
 -- setup physics
-physics = hg.SceneNewtonPhysics()
+physics = hg.SceneBullet3Physics()
 physics:SceneCreatePhysicsFromAssets(scene)
 
 physic_nodes = {}  -- keep track of dynamically created physic nodes
@@ -110,11 +110,11 @@ while true do
 	-- update scene and physic system, synchronize physics to scene, submit scene to draw
 	dt = hg.TickClock()
 
-	hg.SceneUpdateSystems(scene, clocks, dt, physics, hg.time_from_sec_f(1 / 30), 1)
+	hg.SceneUpdateSystems(scene, clocks, dt, physics, hg.time_from_sec_f(1 / 60), 4)
 	view_id, pass_id = hg.SubmitSceneToPipeline(0, scene, hg.IntRect(0, 0, res_x, res_y), true, pipeline, res)
 
 	-- on-screen usage text
-	hg.SetView2D(view_id, res_x, res_y, -1, 1, hg.CF_Depth, hg.Color.Black, 1, 0)
+	hg.SetView2D(view_id, 0, 0, res_x, res_y, -1, 1, hg.CF_Depth, hg.Color.Black, 1, 0)
 	hg.DrawText(view_id, font, 'S: Add object - D: Destruct object', font_program, 'u_tex', 0, hg.Mat4.Identity, hg.Vec3(460, res_y - 60, 0), hg.DTHA_Left, hg.DTVA_Bottom, text_uniform_values, {}, text_render_state)
 	hg.DrawText(view_id, font, string.format('%d Object', #physic_nodes), font_program, 'u_tex', 0, hg.Mat4.Identity, hg.Vec3(res_x - 200, res_y - 60, 0), hg.DTHA_Left, hg.DTVA_Bottom, text_uniform_values, {}, text_render_state)
 

@@ -38,9 +38,9 @@ ground_node = hg.CreatePhysicCube(scene, hg.Vec3(100, 0.02, 100), hg.Translation
 clocks = hg.SceneClocks()
 
 -- scene physics
-physics = hg.SceneNewtonPhysics()
+physics = hg.SceneBullet3Physics()
 physics:SceneCreatePhysicsFromAssets(scene)
-physics_step = hg.time_from_sec_f(1 / 30)
+physics_step = hg.time_from_sec_f(1 / 60)
 
 -- main loop
 keyboard = hg.Keyboard()
@@ -51,15 +51,17 @@ while not keyboard:Down(hg.K_Escape) do
 	dt = hg.TickClock()
 
 	if keyboard:Pressed(hg.K_I) then
+		physics:NodeWake(cube_node)
 		world_pos = hg.GetT(cube_node:GetTransform():GetWorld())
-		physics:NodeAddImpulse(cube_node, hg.Vec3(0, 2, 0), world_pos, physics_step)
+		physics:NodeAddImpulse(cube_node, hg.Vec3(0, 8, 0), world_pos)
 	end
 	if keyboard:Pressed(hg.K_F) then
+		physics:NodeWake(cube_node)
 		world_pos = hg.GetT(cube_node:GetTransform():GetWorld())
-		physics:NodeAddForce(cube_node, hg.Vec3(0, 2, 0), world_pos)
+		physics:NodeAddForce(cube_node, hg.Vec3(0, 8, 0), world_pos)
 	end
 
-	hg.SceneUpdateSystems(scene, clocks, dt, physics, physics_step, 1000)
+	hg.SceneUpdateSystems(scene, clocks, dt, physics, physics_step, 3)
 	hg.SubmitSceneToPipeline(0, scene, hg.IntRect(0, 0, res_x, res_y), true, pipeline, res)
 
 	hg.Frame()

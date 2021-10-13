@@ -3,7 +3,7 @@
 hg = require("harfang")
 
 hg.InputInit()
-hg.WindowSystemInit()
+hg.AudioInit()
 
 hg.AddAssetsFolder("resources_compiled")
 

@@ -21,7 +21,7 @@ while not hg.ReadKeyboard().Key(hg.K_Escape):
 		print('Render reset to %dx%d' % (res_x, res_y))
 
 	viewpoint = hg.TransformationMat4(hg.Vec3(1, 1, -2), hg.Deg3(24, -27, 0))
-	hg.SetViewPerspective(0, res_x, res_y, viewpoint, 0.01, 100, 1.8, hg.CF_Color | hg.CF_Depth, hg.ColorI(64, 64, 64), 1, 0)
+	hg.SetViewPerspective(0, 0, 0, res_x, res_y, viewpoint, 0.01, 100, 1.8, hg.CF_Color | hg.CF_Depth, hg.ColorI(64, 64, 64), 1, 0)
 
 	hg.DrawModel(0, cube_mdl, cube_prg, [], [], hg.TranslationMat4(hg.Vec3(0, 0, 0)))
 

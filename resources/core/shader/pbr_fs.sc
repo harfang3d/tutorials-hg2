@@ -91,7 +91,7 @@ vec3 FresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness) {
 	return F0 + (max(vec3_splat(1.0 - roughness), F0) - F0) * pow(max(1.0 - cosTheta, 0.0), 5.0);
 }
 
-vec3 GGX(vec3 V, vec3 N, float NdotV, vec3 L, vec3 albedo, float roughness, float metalness, vec3 F0) {
+vec3 GGX(vec3 V, vec3 N, float NdotV, vec3 L, vec3 albedo, float roughness, float metalness, vec3 F0, vec3 diffuse_color, vec3 specular_color) {
 	vec3 H = normalize(V - L);
 
 	float NdotH = max(dot(N, H), 0.0);
@@ -107,7 +107,7 @@ vec3 GGX(vec3 V, vec3 N, float NdotV, vec3 L, vec3 albedo, float roughness, floa
 	vec3 kD = (vec3_splat(1.0) - F) * (1.0 - metalness); // metallic materials have no diffuse (NOTE: mimics mental ray and 3DX Max ART renderers behavior)
 	vec3 diffuseBRDF = kD * albedo;
 
-	return (diffuseBRDF + specularBRDF) * NdotL;
+	return (diffuse_color * diffuseBRDF + specular_color * specularBRDF) * NdotL;
 }
 
 //
@@ -159,7 +159,7 @@ void main() {
 	vec3 T = normalize(vTangent);
 	vec3 B = normalize(vBinormal);
 
-	mat3 TBN = MakeMat3(T, B, N);
+	mat3 TBN = mtxFromRows(T, B, N);
 
 	N.xy = texture2D(uNormalMap, vTexCoord0).xy * 2.0 - 1.0;
 	N.z = sqrt(1.0 - dot(N.xy, N.xy));
@@ -198,7 +198,7 @@ void main() {
 # endif
 		}
 #endif
-		color += GGX(V, N, NdotV, uLightDir[0].xyz, base_opacity.xyz, occ_rough_metal.g, occ_rough_metal.b, F0) * uLightDiffuse[0].xyz * k_shadow;
+		color += GGX(V, N, NdotV, uLightDir[0].xyz, base_opacity.xyz, occ_rough_metal.g, occ_rough_metal.b, F0, uLightDiffuse[0].xyz * k_shadow, uLightSpecular[0].xyz * k_shadow);
 	}
 	// SLOT 1: point/spot light (with optional shadows)
 	{
@@ -206,12 +206,11 @@ void main() {
 		float distance = length(L);
 		L /= max(distance, 1e-8);
 		float attenuation = LightAttenuation(L, uLightDir[1].xyz, distance, uLightPos[1].w, uLightDir[1].w, uLightDiffuse[1].w);
-		vec3 radiance = uLightDiffuse[1].xyz * attenuation;
 
 #if SLOT1_SHADOWS
-		radiance *=SampleShadowPCF(uSpotShadowMap, vSpotShadowCoord, uShadowState.y, uShadowState.w, jitter);
+		attenuation *=SampleShadowPCF(uSpotShadowMap, vSpotShadowCoord, uShadowState.y, uShadowState.w, jitter);
 #endif
-		color += GGX(V, N, NdotV, L, base_opacity.xyz, occ_rough_metal.g, occ_rough_metal.b, F0) * radiance;
+		color += GGX(V, N, NdotV, L, base_opacity.xyz, occ_rough_metal.g, occ_rough_metal.b, F0, uLightDiffuse[1].xyz * attenuation, uLightSpecular[1].xyz * attenuation);
 	}
 	// SLOT 2-N: point/spot light (no shadows) [todo]
 	{
@@ -220,9 +219,8 @@ void main() {
 			float distance = length(L);
 			L /= max(distance, 1e-8);
 			float attenuation = LightAttenuation(L, uLightDir[i].xyz, distance, uLightPos[i].w, uLightDir[i].w, uLightDiffuse[i].w);
-			vec3 radiance = uLightDiffuse[i].xyz * attenuation;
 
-			color += GGX(V, N, NdotV, L, base_opacity.xyz, occ_rough_metal.g, occ_rough_metal.b, F0) * radiance;
+			color += GGX(V, N, NdotV, L, base_opacity.xyz, occ_rough_metal.g, occ_rough_metal.b, F0, uLightDiffuse[i].xyz * attenuation, uLightSpecular[i].xyz * attenuation);
 		}
 	}
 

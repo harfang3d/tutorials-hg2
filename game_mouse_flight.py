@@ -114,7 +114,7 @@ while not keyboard.Down(hg.K_Escape):
 	view_id, passes_id = hg.SubmitSceneToPipeline(view_id, scene, hg.IntRect(0, 0, int(res_x), int(res_y)), True, pipeline, res)
 
 	# draw 2D GUI
-	hg.SetView2D(view_id, res_x, res_y, -1, 1, hg.CF_Depth, hg.Color.Black, 1, 0, True)
+	hg.SetView2D(view_id, 0, 0, res_x, res_y, -1, 1, hg.CF_Depth, hg.Color.Black, 1, 0, True)
 	draw_circle(view_id, hg.Vec3(mouse_x, mouse_y, 0), 20, hg.Color.White)  # display mouse cursor
 
 	# end of frame

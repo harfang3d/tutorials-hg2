@@ -1,9 +1,26 @@
-# HARFANG® 2.0 Tutorials
+# HARFANG® 3.0 Tutorials
 
 These **tutorials** demonstrate the usage of the HARFANG 2.0 API in **Python** and **Lua**.
-If you want to know more about HARFANG, please visit the [official website](https://www.harfang3d.com).
 
-To **run the tutorials**, please follow the **instructions** here : https://www.harfang3d.com/docs/2.0.111/man.quickstart/
+To run the tutorials:
+
+1. Download or clone this repository to your computer _(eg. in `d:/tutorials-hg2`)_.
+2. Download _assetc_ for your platform from [here](https://harfang3d.com/releases) to compile the tutorial resources.
+3. Drag and drop the tutorial resources folder on the assetc executable **-OR-** execute assetc passing it the path to the tutorial resources folder _(eg. `assetc d:/tutorials-hg2/resources`)_.
+
+![assetc drag & drop](https://github.com/harfang3d/image-storage/raw/main/tutorials/assetc.gif)
+
+After the compilation process finishes, you will see a `resources_compiled` folder next to the tutorials resources folder.
+
+You can now execute the tutorials from the folder you unzipped them to.
+
+```bash
+D:\tutorials-hg2>python draw_lines.py
+```
+
+Alternatively, you can open the tutorial folder using [Visual Studio Code](https://code.visualstudio.com/) and use the provided debug targets to run the tutorials.
+
+**If you want to know more about HARFANG**, please visit the [official website](https://www.harfang3d.com).
 
 ## Screenshots
 * AAA Rendering Pipeline

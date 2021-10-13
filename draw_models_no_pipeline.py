@@ -24,7 +24,7 @@ while not hg.ReadKeyboard().Key(hg.K_Escape):
 	angle = angle + hg.time_to_sec_f(dt)
 
 	viewpoint = hg.TranslationMat4(hg.Vec3(0, 1, -3))
-	hg.SetViewPerspective(0, res_x, res_y, viewpoint)
+	hg.SetViewPerspective(0, 0, 0, res_x, res_y, viewpoint)
 
 	hg.DrawModel(0, cube_mdl, shader, [], [], hg.TransformationMat4(hg.Vec3(0, 1, 0), hg.Vec3(angle, angle, angle)))
 	hg.DrawModel(0, ground_mdl, shader, [], [], hg.TranslationMat4(hg.Vec3(0, 0, 0)))

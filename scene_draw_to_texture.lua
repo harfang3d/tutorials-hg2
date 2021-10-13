@@ -46,7 +46,7 @@ while not hg.ReadKeyboard():Key(hg.K_Escape) do
 	view_id, pass_ids = hg.SubmitSceneToPipeline(view_id, scene, hg.IntRect(0, 0, 512, 512), true, pipeline, res, frame_buffer.handle)
 
 	-- draw a rotating cube in immediate mode using the texture the scene was rendered to
-	hg.SetViewPerspective(view_id, res_x, res_y, hg.TranslationMat4(hg.Vec3(0, 0, -1.8)))
+	hg.SetViewPerspective(view_id, 0, 0, res_x, res_y, hg.TranslationMat4(hg.Vec3(0, 0, -1.8)))
 
 	val_uniforms = {hg.MakeUniformSetValue('color', hg.Vec4(1, 1, 1, 1))}  -- note: these could be moved out of the main loop but are kept here for readability
 	tex_uniforms = {hg.MakeUniformSetTexture('s_tex', res:GetTexture(frame_buffer.color), 0)}

@@ -1,7 +1,9 @@
 $input a_position, a_texcoord0
-$output v_viewRay
+$output vTexCoord0, v_viewRay
 
 #include <forward_pipeline.sh>
+
+#define uv_ratio vec2_splat(uAAAParams[0].x)
 
 void main() {
 	gl_Position = mul(u_viewProj, vec4(a_position.xy, 0.0, 1.0));
@@ -14,4 +16,6 @@ void main() {
 	ndc /= ndc.z;
 
 	v_viewRay = ndc.xyz;
+
+	vTexCoord0 = a_texcoord0;
 }

@@ -45,7 +45,7 @@ bool hiz_trace(vec3 ray_o, vec3 ray_d, mat4 proj, float z_near, int max_iteratio
 	vec2 cell_count = mip_size(level_min);
 
 	// clip to the near plane
-	float ray_len = (ray_o.z + ray_d.z * 1000.0) < z_near ? (z_near - ray_o.z) / ray_d.z : 1000.0;
+	float ray_len = ((ray_o.z + ray_d.z * 1000.0) < z_near) ? (z_near - ray_o.z) / ray_d.z : 1000.0;
 	vec3 end_point = ray_o + ray_d * ray_len;
 
 	// project into homogeneous clip space

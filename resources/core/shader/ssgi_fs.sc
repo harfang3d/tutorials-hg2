@@ -1,4 +1,4 @@
-$input v_viewRay
+$input vTexCoord0, v_viewRay
 
 #include <forward_pipeline.sh>
 
@@ -21,17 +21,13 @@ void main() {
 	vec4 jitter = texture2D(u_noise, mod(gl_FragCoord.xy, vec2(64, 64)) / vec2(64, 64));
 
 	// sample normal/depth
-	vec2 uv = gl_FragCoord.xy * uv_ratio / uResolution.xy;
+	vec2 uv = GetAttributeTexCoord(vTexCoord0, textureSize(u_attr0, 0).xy);
 	vec4 attr0 = texture2D(u_attr0, uv);
 
 	vec3 n = attr0.xyz;
 
 	// compute ray origin & direction
-	float near = -uMainProjection[2].w / uMainProjection[2].z;
-	float far  = -near * uMainProjection[2].z / (1.0 - uMainProjection[2].z);
-	float z = (attr0.w * (far - near) + near*far) / far;
-
-	vec3 ray_o = v_viewRay * z;
+	vec3 ray_o = GetRayOrigin(uMainProjection, v_viewRay, attr0.w);
 
 	// spread
 	vec3 right = normalize(cross(n, vec3(1, 0, 0)));
@@ -39,6 +35,7 @@ void main() {
 
 	//
 	vec4 color = vec4_splat(0.);
+	const float z_min = 0.1;
 
 	for (int i = 0; i < int(sample_count); ++i) {
 		float r = (float(i) + jitter.y) / sample_count;
@@ -52,7 +49,7 @@ void main() {
 
 			vec2 hit_pixel;
 			vec3 hit_point;
-			if (TraceScreenRay(ray_o - v_viewRay * 0.05, ray_d_spread, uMainProjection, 0.1, /*jitter.z,*/ 64, hit_pixel, hit_point)) {
+			if (TraceScreenRay(ray_o - v_viewRay * 0.05, ray_d_spread, uMainProjection, z_min, /*jitter.z,*/ 64, hit_pixel, hit_point)) {
 				// use hit pixel velocity to compensate the fact that we are sampling the previous frame
 				vec2 uv = hit_pixel * uv_ratio / uResolution.xy;
 				vec2 vel = GetVelocityVector(uv);

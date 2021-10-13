@@ -55,7 +55,7 @@ while not hg.ReadKeyboard().Key(hg.K_Escape):
 
 	hg.ImGuiEnd()
 
-	hg.SetView2D(imgui_output_view, res_x, res_y, -1, 0, hg.CF_Color | hg.CF_Depth, imgui_view_clear_color, 1, 0)
+	hg.SetView2D(imgui_output_view, 0, 0, res_x, res_y, -1, 0, hg.CF_Color | hg.CF_Depth, imgui_view_clear_color, 1, 0)
 	hg.ImGuiEndFrame(imgui_output_view)
 
 	# rendering frame

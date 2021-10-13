@@ -24,7 +24,7 @@ while not hg.ReadKeyboard().Key(hg.K_Escape):
 		hg.ImGuiText('Hello World!')
 	hg.ImGuiEnd()
 
-	hg.SetView2D(0, res_x, res_y, -1, 1, hg.CF_Color | hg.CF_Depth, hg.Color.Black, 1, 0)
+	hg.SetView2D(0, 0, 0, res_x, res_y, -1, 1, hg.CF_Color | hg.CF_Depth, hg.Color.Black, 1, 0)
 	hg.ImGuiEndFrame(0)
 
 	hg.Frame()
