@@ -22,7 +22,7 @@ hg.LoadSceneFromAssets('playground/playground.scn', scene, res, hg.GetForwardPip
 # declare the biped actor class
 class BipedActor:
 	def __init__(self, pos):
-		self.__node = hg.CreateInstanceFromAssets(scene, hg.Mat4.Identity, "biped/biped.scn", res, hg.GetForwardPipelineInfo())
+		self.__node, _ = hg.CreateInstanceFromAssets(scene, hg.Mat4.Identity, "biped/biped.scn", res, hg.GetForwardPipelineInfo())
 		self.__node.GetTransform().SetPosRot(pos, hg.Deg3(0, hg.FRand(360), 0))
 
 		self.__delay = 0

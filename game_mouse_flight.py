@@ -55,7 +55,7 @@ setting_plane_mouse_sensitivity = 0.5
 scene = hg.Scene()
 hg.LoadSceneFromAssets('playground/playground.scn', scene, res, hg.GetForwardPipelineInfo())
 
-plane_node = hg.CreateInstanceFromAssets(scene, hg.TranslationMat4(hg.Vec3(0, 4, 0)), 'paper_plane/paper_plane.scn', res, hg.GetForwardPipelineInfo())
+plane_node, _ = hg.CreateInstanceFromAssets(scene, hg.TranslationMat4(hg.Vec3(0, 4, 0)), 'paper_plane/paper_plane.scn', res, hg.GetForwardPipelineInfo())
 camera_node = hg.CreateCamera(scene, hg.TranslationMat4(hg.Vec3(0, 4, -5)), 0.01, 1000)
 
 scene.SetCurrentCamera(camera_node)

@@ -20,7 +20,8 @@ scene = hg.Scene()
 hg.LoadSceneFromAssets("materials/materials.scn", scene, res, hg.GetForwardPipelineInfo())
 
 # create a 512x512 frame buffer to draw the scene to
-frame_buffer = hg.CreateFrameBuffer(512, 512, hg.TF_RGBA32F, hg.TF_D24, 8, res, 'framebuffer')  # 8x MSAA
+frame_buffer = hg.CreateFrameBuffer(512, 512, hg.TF_RGBA32F, hg.TF_D24, 8, 'framebuffer')  # 8x MSAA
+color = hg.GetColorTexture(frame_buffer)
 
 # create the cube model
 vtx_layout = hg.VertexLayoutPosFloatNormUInt8TexCoord0UInt8()
@@ -50,7 +51,7 @@ while not hg.ReadKeyboard().Key(hg.K_Escape):
 	hg.SetViewPerspective(view_id, 0, 0, res_x, res_y, hg.TranslationMat4(hg.Vec3(0, 0, -1.8)))
 
 	val_uniforms = [hg.MakeUniformSetValue('color', hg.Vec4(1, 1, 1, 1))]  # note: these could be moved out of the main loop but are kept here for readability
-	tex_uniforms = [hg.MakeUniformSetTexture('s_tex', res.GetTexture(frame_buffer.color), 0)]
+	tex_uniforms = [hg.MakeUniformSetTexture('s_tex', color, 0)]
 
 	hg.DrawModel(view_id, cube_mdl, cube_prg, val_uniforms, tex_uniforms, hg.TransformationMat4(hg.Vec3(0, 0, 0), hg.Vec3(angle * 0.1, angle * 0.05, angle * 0.2)))
 

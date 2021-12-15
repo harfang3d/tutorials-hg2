@@ -114,7 +114,6 @@ while not keyboard:Pressed(hg.K_Escape) do
 	dt = hg.TickClock()
 
 	for i, actor in ipairs(actors) do
-		print(actor)
 		actor:update(dt)
 	end
 

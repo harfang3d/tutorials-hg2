@@ -10,7 +10,7 @@ end
 
 entries = hg.ListDirRecursive('resources', hg.DE_All)
 
-for i=0, entries:size() do
+for i=0, entries:size()-1 do
 	entry = entries:at(i)
 	print(string.format('- %s is a %s', entry.name, entry_type_to_string(entry.type)))
 end
