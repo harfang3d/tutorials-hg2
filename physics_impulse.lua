@@ -6,7 +6,7 @@ hg.InputInit()
 hg.WindowSystemInit()
 
 res_x, res_y = 1280, 720
-win = hg.RenderInit('Harfang - Physics Impulse', res_x, res_y, hg.RF_VSync | hg.RF_MSAA4X)
+win = hg.RenderInit('Harfang - Physics Force/Impulse (Press space to alternate)', res_x, res_y, hg.RF_VSync | hg.RF_MSAA4X)
 
 pipeline = hg.CreateForwardPipeline()
 res = hg.PipelineResources()
@@ -45,21 +45,38 @@ physics_step = hg.time_from_sec_f(1 / 60)
 -- main loop
 keyboard = hg.Keyboard()
 
+use_force = true
+
 while not keyboard:Down(hg.K_Escape) do
 	keyboard:Update()
 
 	dt = hg.TickClock()
 
-	if keyboard:Pressed(hg.K_I) then
-		physics:NodeWake(cube_node)
-		world_pos = hg.GetT(cube_node:GetTransform():GetWorld())
-		physics:NodeAddImpulse(cube_node, hg.Vec3(0, 8, 0), world_pos)
+	if keyboard:Pressed(hg.K_Space) then
+		use_force = not use_force
 	end
-	if keyboard:Pressed(hg.K_F) then
-		physics:NodeWake(cube_node)
-		world_pos = hg.GetT(cube_node:GetTransform():GetWorld())
-		physics:NodeAddForce(cube_node, hg.Vec3(0, 8, 0), world_pos)
+
+	world_pos = hg.GetT(cube_node:GetTransform():GetWorld())
+	dist_to_ground = world_pos.y - 0.5
+
+	if dist_to_ground < 1.0 then
+		k = -(dist_to_ground - 1.0)
+
+		if use_force then
+			F = hg.Vec3(0, 1, 0) * k * 80  -- apply a force inversely proportional to the distance to the ground
+			physics:NodeAddForce(cube_node, F, world_pos)
+		else
+			stiffness = 10
+
+			cur_velocity = physics:NodeGetLinearVelocity(cube_node)
+			tgt_velocity = hg.Vec3(0, 1, 0) * k * stiffness  -- compute a velocity that brings us to 1 meter above the ground
+
+			I = tgt_velocity - cur_velocity  -- an impulse is an instantaneous change in velocity
+			physics:NodeAddImpulse(cube_node, I, world_pos)
+		end
 	end
+
+	physics:NodeWake(cube_node)
 
 	hg.SceneUpdateSystems(scene, clocks, dt, physics, physics_step, 3)
 	hg.SubmitSceneToPipeline(0, scene, hg.IntRect(0, 0, res_x, res_y), true, pipeline, res)

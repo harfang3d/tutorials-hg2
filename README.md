@@ -1,6 +1,6 @@
-# HARFANG® 3.1.0 Tutorials
+# HARFANG® Tutorials
 
-These **tutorials** demonstrate the usage of the HARFANG 3.1.0 API in **Python** and **Lua**.
+These **tutorials** demonstrate the usage of the HARFANG API in **Python** and **Lua**.
 
 To run the tutorials:
 

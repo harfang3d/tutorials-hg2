@@ -23,6 +23,7 @@ hg.LoadSceneFromAssets("car_engine/engine.scn", scene, res, hg.GetForwardPipelin
 -- AAA pipeline
 pipeline_aaa_config = hg.ForwardPipelineAAAConfig()
 pipeline_aaa = hg.CreateForwardPipelineAAAFromAssets("core", pipeline_aaa_config, hg.BR_Equal, hg.BR_Equal)
+pipeline_aaa_config.sample_count = 1
 
 -- main loop
 frame = 0

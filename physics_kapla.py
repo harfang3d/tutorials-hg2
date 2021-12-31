@@ -7,7 +7,7 @@ hg.InputInit()
 hg.WindowSystemInit()
 
 res_x, res_y = 1280, 720
-win = hg.RenderInit('Harfang - Kapla', res_x, res_y, hg.RF_VSync | hg.RF_MSAA4X)
+win = hg.RenderInit('Harfang - Kapla - Press SPACEBAR', res_x, res_y, hg.RF_VSync | hg.RF_MSAA4X)
 
 hg.AddAssetsFolder('resources_compiled')
 
