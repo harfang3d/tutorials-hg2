@@ -88,17 +88,18 @@ while not hg.ReadKeyboard():Key(hg.K_Escape) do
 	left, right = hg.OpenVRStateToViewState(vr_state)
 
 	vid = 0  -- keep track of the next free view id
+	passId = hg.SceneForwardPipelinePassViewId()
 
 	-- Prepare view-independent render data once
-	vid, passId = hg.PrepareSceneForwardPipelineCommonRenderData(vid, scene, render_data, pipeline, res)
+	vid, passId = hg.PrepareSceneForwardPipelineCommonRenderData(vid, scene, render_data, pipeline, res, passId)
 	vr_eye_rect = hg.IntRect(0, 0, vr_state.width, vr_state.height)
 
 	-- Prepare the left eye render data then draw to its framebuffer
-	vid, passId = hg.PrepareSceneForwardPipelineViewDependentRenderData(vid, left, scene, render_data, pipeline, res)
+	vid, passId = hg.PrepareSceneForwardPipelineViewDependentRenderData(vid, left, scene, render_data, pipeline, res, passId)
 	vid, passId = hg.SubmitSceneToForwardPipeline(vid, scene, vr_eye_rect, left, pipeline, render_data, res, vr_left_fb:GetHandle())
 
 	-- Prepare the right eye render data then draw to its framebuffer
-	vid, passId = hg.PrepareSceneForwardPipelineViewDependentRenderData(vid, right, scene, render_data, pipeline, res)
+	vid, passId = hg.PrepareSceneForwardPipelineViewDependentRenderData(vid, right, scene, render_data, pipeline, res, passId)
 	vid, passId = hg.SubmitSceneToForwardPipeline(vid, scene, vr_eye_rect, right, pipeline, render_data, res, vr_right_fb:GetHandle())
 
 	-- Display the VR eyes texture to the backbuffer
