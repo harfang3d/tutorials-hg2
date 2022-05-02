@@ -2,7 +2,7 @@
 	"profiles": {
 		"default": {
 			"generate-probe": true,
-			"max-probe-size": 256,
+			"max-probe-size": 128,
 			"radiance-edge-fixup": true
 		}
 	}

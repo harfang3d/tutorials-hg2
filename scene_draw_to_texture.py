@@ -20,7 +20,7 @@ scene = hg.Scene()
 hg.LoadSceneFromAssets("materials/materials.scn", scene, res, hg.GetForwardPipelineInfo())
 
 # create a 512x512 frame buffer to draw the scene to
-frame_buffer = hg.CreateFrameBuffer(512, 512, hg.TF_RGBA32F, hg.TF_D24, 8, 'framebuffer')  # 8x MSAA
+frame_buffer = hg.CreateFrameBuffer(512, 512, hg.TF_RGBA32F, hg.TF_D24, 4, 'framebuffer')  # 4x MSAA
 color = hg.GetColorTexture(frame_buffer)
 
 # create the cube model
