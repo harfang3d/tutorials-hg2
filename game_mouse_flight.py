@@ -105,7 +105,7 @@ while not keyboard.Down(hg.K_Escape):
 
 	# update gameplay elements (plane & camera)
 	update_plane(mouse_x_normd, mouse_y_normd)
-	update_chase_camera(setting_camera_chase_offset * plane_node.GetTransform().GetWorld())
+	update_chase_camera(plane_node.GetTransform().GetWorld() * setting_camera_chase_offset)
 
 	# update scene and submit it to render pipeline
 	scene.Update(dt)
