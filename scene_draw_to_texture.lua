@@ -34,7 +34,7 @@ cube_prg = hg.LoadProgramFromAssets('shaders/texture')
 -- main loop
 angle = 0
 
-while not hg.ReadKeyboard():Key(hg.K_Escape) do
+while not hg.ReadKeyboard():Key(hg.K_Escape) and hg.IsWindowOpen(win) do
 	dt = hg.TickClock()
 	angle = angle + hg.time_to_sec_f(dt)
 

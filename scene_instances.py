@@ -77,7 +77,7 @@ print('%d nodes in scene' % (scene.GetAllNodeCount()))
 # main loop
 keyboard = hg.Keyboard()
 
-while not keyboard.Pressed(hg.K_Escape):
+while not keyboard.Down(hg.K_Escape) and hg.IsWindowOpen(win):
 	_, res_x, res_y = hg.RenderResetToWindow(win, res_x, res_y, hg.RF_VSync | hg.RF_MSAA4X | hg.RF_MaxAnisotropy)
 
 	keyboard.Update()

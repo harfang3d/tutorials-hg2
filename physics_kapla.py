@@ -92,7 +92,7 @@ physics.SceneCreatePhysicsFromAssets(scene)
 physics_step = hg.time_from_sec_f(1 / 60)
 
 # main loop
-while not keyboard.Down(hg.K_Escape):
+while not keyboard.Down(hg.K_Escape) and hg.IsWindowOpen(win):
 	keyboard.Update()
 	mouse.Update()
 

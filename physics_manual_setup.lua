@@ -54,7 +54,7 @@ physics = hg.SceneBullet3Physics()
 physics:SceneCreatePhysicsFromAssets(scene)
 
 -- main loop
-while not hg.ReadKeyboard():Key(hg.K_Escape) do
+while not hg.ReadKeyboard():Key(hg.K_Escape) and hg.IsWindowOpen(win) do
 	dt = hg.TickClock()
 
 	hg.SceneUpdateSystems(scene, clocks, dt, physics, hg.time_from_sec_f(1 / 60), 1)

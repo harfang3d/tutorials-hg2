@@ -47,7 +47,7 @@ keyboard = hg.Keyboard()
 
 use_force = true
 
-while not keyboard:Down(hg.K_Escape) do
+while not keyboard:Down(hg.K_Escape) and hg.IsWindowOpen(win) do
 	keyboard:Update()
 
 	dt = hg.TickClock()

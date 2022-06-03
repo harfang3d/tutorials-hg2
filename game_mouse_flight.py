@@ -90,7 +90,7 @@ def update_chase_camera(target_pos):
 
 
 # game loop
-while not keyboard.Down(hg.K_Escape):
+while not keyboard.Down(hg.K_Escape) and hg.IsWindowOpen(win):
 	dt = hg.TickClock()  # tick clock, retrieve elapsed clock since last call
 
 	# update mouse/keyboard devices

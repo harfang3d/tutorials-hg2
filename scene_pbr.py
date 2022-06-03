@@ -19,7 +19,7 @@ scene = hg.Scene()
 hg.LoadSceneFromAssets("materials/materials.scn", scene, res, hg.GetForwardPipelineInfo())
 
 # main loop
-while not hg.ReadKeyboard().Key(hg.K_Escape):
+while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
 	dt = hg.TickClock()
 
 	scene.Update(dt)

@@ -46,7 +46,7 @@ mat_update_delay = 0
 texture_ref = hg.LoadTextureFromAssets('textures/squares.png', 0, res)
 
 # main loop
-while not hg.ReadKeyboard().Key(hg.K_Escape):
+while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
 	dt = hg.TickClock()
 
 	mat_update_delay = mat_update_delay - dt

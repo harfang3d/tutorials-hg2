@@ -40,14 +40,14 @@ hg.CreateObject(scene, hg.TranslationMat4(hg.Vec3(0, 0, 0)), ground_ref, {mat_gr
 
 -- define viewports
 viewports = {
-	{rect = hg.IntRect(0, 0, res_x / 2, res_y / 2), cam_pos = hg.Vec3(-4.015, 2.368, -3.484), cam_rot = hg.Vec3(0.35, 0.87, 0.0)},
-	{rect = hg.IntRect(res_x / 2, 0, res_x, res_y / 2), cam_pos = hg.Vec3(-4.143, 2.976, 4.127), cam_rot = hg.Vec3(0.423, 2.365, 0.0)},
-	{rect = hg.IntRect(0, res_y / 2, res_x / 2, res_y), cam_pos = hg.Vec3(4.020, 2.374, 3.469), cam_rot = hg.Vec3(0.353, 4.016, 0.0)},
-	{rect = hg.IntRect(res_x / 2, res_y / 2, res_x, res_y), cam_pos = hg.Vec3(3.469, 2.374, -4.020), cam_rot = hg.Vec3(0.353, -0.695, 0.0)}
+	{rect = hg.IntRect(0, 0, res_x // 2, res_y // 2), cam_pos = hg.Vec3(-4.015, 2.368, -3.484), cam_rot = hg.Vec3(0.35, 0.87, 0.0)},
+	{rect = hg.IntRect(res_x // 2, 0, res_x, res_y // 2), cam_pos = hg.Vec3(-4.143, 2.976, 4.127), cam_rot = hg.Vec3(0.423, 2.365, 0.0)},
+	{rect = hg.IntRect(0, res_y // 2, res_x // 2, res_y), cam_pos = hg.Vec3(4.020, 2.374, 3.469), cam_rot = hg.Vec3(0.353, 4.016, 0.0)},
+	{rect = hg.IntRect(res_x // 2, res_y // 2, res_x, res_y), cam_pos = hg.Vec3(3.469, 2.374, -4.020), cam_rot = hg.Vec3(0.353, -0.695, 0.0)}
 }
 
 -- main loop
-while not hg.ReadKeyboard():Key(hg.K_Escape) do
+while not hg.ReadKeyboard():Key(hg.K_Escape) and hg.IsWindowOpen(win) do
 	dt = hg.TickClock()
 
 	-- animate yellow cube & update scene once for all viewports

@@ -9,7 +9,7 @@ win = hg.NewWindow('Harfang - Read Gamepad', 320, 200)
 
 gamepad = hg.Gamepad()
 
-while not hg.ReadKeyboard().Key(hg.K_Escape):
+while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
 	gamepad.Update()
 
 	if gamepad.Connected():

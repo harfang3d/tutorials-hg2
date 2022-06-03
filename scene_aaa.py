@@ -27,7 +27,7 @@ pipeline_aaa_config.sample_count = 1
 # main loop
 frame = 0
 
-while not hg.ReadKeyboard().Key(hg.K_Escape):
+while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
 	dt = hg.TickClock()
 
 	trs = scene.GetNode('engine_master').GetTransform()

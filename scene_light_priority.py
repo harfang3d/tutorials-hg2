@@ -55,7 +55,7 @@ for i in range(16):
 # main loop
 angle = 0
 
-while not hg.ReadKeyboard().Key(hg.K_Escape):
+while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
 	dt = hg.TickClock()
 
 	# animate lights
