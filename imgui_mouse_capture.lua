@@ -18,7 +18,7 @@ text_value = 'Clicking into this field will not clear the screen in red.'
 mouse = hg.Mouse()
 keyboard = hg.Keyboard()
 
-while not hg.ReadKeyboard():Key(hg.K_Escape) do
+while not hg.ReadKeyboard():Key(hg.K_Escape) and hg.IsWindowOpen(win) do
 	mouse:Update()
 	keyboard:Update()
 

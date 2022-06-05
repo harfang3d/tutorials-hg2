@@ -24,7 +24,7 @@ vtx = hg.Vertices(vtx_layout, line_count * 2)
 # main loop
 angle = 0
 
-while not hg.ReadKeyboard().Key(hg.K_Escape):
+while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
 	hg.SetViewClear(0, hg.CF_Color | hg.CF_Depth, hg.ColorI(64, 64, 64), 1, 0)
 	hg.SetViewRect(0, 0, 0, res_x, res_y)
 

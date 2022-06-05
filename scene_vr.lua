@@ -77,7 +77,7 @@ quad_uniform_set_value_list:push_back(hg.MakeUniformSetValue("color", hg.Vec4(1,
 quad_uniform_set_texture_list = hg.UniformSetTextureList()
 
 -- Main loop
-while not hg.ReadKeyboard():Key(hg.K_Escape) do
+while not hg.ReadKeyboard():Key(hg.K_Escape) and hg.IsWindowOpen(win) do
 	dt = hg.TickClock()
 
 	scene:Update(dt)

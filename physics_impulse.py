@@ -47,7 +47,7 @@ keyboard = hg.Keyboard()
 
 use_force = True
 
-while not keyboard.Down(hg.K_Escape):
+while not keyboard.Down(hg.K_Escape) and hg.IsWindowOpen(win):
 	keyboard.Update()
 
 	dt = hg.TickClock()

@@ -29,7 +29,7 @@ for i in range(max_stars):
 	stars.append(hg.RandomVec3(-starfield_size, starfield_size))
 
 # main loop
-while not hg.ReadKeyboard().Key(hg.K_Escape):
+while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(window):
 	hg.SetViewClear(0, hg.CF_Color | hg.CF_Depth, hg.Color.Black, 1, 0)
 	hg.SetViewRect(0, 0, 0, width, height)
 

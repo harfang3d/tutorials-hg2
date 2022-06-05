@@ -1,5 +1,11 @@
 {
 	"editor": {
+		"animeditor_plugin": {
+			"quantize_time": true,
+			"show_trajectories": null,
+			"trajectories_tick_seconds": 1.0,
+			"trajectories_tick_size": 0.10000000149011612
+		},
 		"explorer": {
 			"node_custom_order": {
 				"refs": [
@@ -185,6 +191,16 @@
 			"node_sort_method": "custom",
 			"show_node_uid": false
 		},
+		"grid_plugin": {
+			"enabled": true,
+			"grid_color_b": 1.0,
+			"grid_color_g": 1.0,
+			"grid_color_r": 1.0,
+			"n_subdivs": 10,
+			"offset": 0.0,
+			"opacity": 0.5,
+			"subdiv_size": 1.0
+		},
 		"navigation_plugin": {
 			"orbit_distance": 7.836572647094727,
 			"speed": 0.10000000149011612,
@@ -192,12 +208,37 @@
 		},
 		"transform_gizmo_plugin": {
 			"mode": "local",
+			"snap": "none",
+			"snap_rotation": 5.0,
+			"snap_rotation_fine": 1.0,
+			"snap_scale": 10.0,
+			"snap_scale_fine": 1.0,
+			"snap_translation": 1.0,
+			"snap_translation_fine": 0.10000000149011612,
 			"tool": "rotation"
 		},
 		"view_plugin": {
-			"show_node_origin": false
+			"show_cameras": true,
+			"show_collisions": false,
+			"show_lights": true,
+			"show_nodes": true,
+			"show_probe": true
 		},
 		"views": {
+			"back": [
+				-0.9999999403953552,
+				0.0,
+				-8.742277657347586e-08,
+				0.0,
+				0.0,
+				1.0,
+				-0.0,
+				0.0,
+				8.742277657347586e-08,
+				-0.0,
+				-0.9999999403953552,
+				0.0
+			],
 			"bottom": [
 				1.0,
 				-0.0,
@@ -217,6 +258,20 @@
 				"znear": -1000.0
 			},
 			"current_camera": 7,
+			"front": [
+				1.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				1.0,
+				-0.0,
+				0.0,
+				0.0,
+				0.0,
+				1.0,
+				0.0
+			],
 			"left": [
 				-8.742277657347586e-08,
 				0.0,

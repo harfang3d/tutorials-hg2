@@ -47,7 +47,7 @@ physics:SceneCreatePhysicsFromAssets(scene)
 -- main loop
 mouse, keyboard = hg.Mouse(), hg.Keyboard()
 
-while not keyboard:Pressed(hg.K_Escape) do
+while not keyboard:Pressed(hg.K_Escape) and hg.IsWindowOpen(win) do
 	keyboard:Update()
 	mouse:Update()
 

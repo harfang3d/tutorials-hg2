@@ -17,7 +17,7 @@ text_uniform_values = {hg.MakeUniformSetValue('u_color', hg.Vec4(1, 1, 0))}
 text_render_state = hg.ComputeRenderState(hg.BM_Alpha, hg.DT_Always, hg.FC_Disabled)
 
 -- main loop
-while not hg.ReadKeyboard('default'):Key(hg.K_Escape) do
+while not hg.ReadKeyboard():Key(hg.K_Escape) and hg.IsWindowOpen(win) do
 	hg.SetView2D(0, 0, 0, res_x, res_y, -1, 1, hg.CF_Color | hg.CF_Depth, hg.ColorI(32, 32, 32), 0, 1)
 
 	hg.DrawText(0, font, 'Hello world!', font_prg, 'u_tex', 0, hg.Mat4.Identity, hg.Vec3(res_x / 2, res_y / 2, 0), hg.DTHA_Center, hg.DTVA_Center, text_uniform_values, {}, text_render_state)

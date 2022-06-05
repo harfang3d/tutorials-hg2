@@ -27,7 +27,7 @@ text_render_state = hg.ComputeRenderState(hg.BM_Alpha, hg.DT_Always, hg.FC_Disab
 # main loop
 angle = 0
 
-while not hg.ReadKeyboard().Key(hg.K_Escape):
+while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
 	dt = hg.TickClock()
 	angle = angle + hg.time_to_sec_f(dt)
 

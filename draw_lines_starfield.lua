@@ -30,7 +30,7 @@ for i = 1, max_stars do
 end
 
 -- main loop
-while not hg.ReadKeyboard():Key(hg.K_Escape) do
+while not hg.ReadKeyboard():Key(hg.K_Escape) and hg.IsWindowOpen(window) do
 	hg.SetViewClear(0, hg.CF_Color | hg.CF_Depth, hg.Color.Black, 1, 0)
 	hg.SetViewRect(0, 0, 0, width, height)
 

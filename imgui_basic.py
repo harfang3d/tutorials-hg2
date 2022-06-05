@@ -17,7 +17,7 @@ imgui_img_prg = hg.LoadProgramFromAssets('core/shader/imgui_image')
 hg.ImGuiInit(10, imgui_prg, imgui_img_prg)
 
 # main loop
-while not hg.ReadKeyboard().Key(hg.K_Escape):
+while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
 	hg.ImGuiBeginFrame(res_x, res_y, hg.TickClock(), hg.ReadMouse(), hg.ReadKeyboard())
 
 	if hg.ImGuiBegin('Window'):

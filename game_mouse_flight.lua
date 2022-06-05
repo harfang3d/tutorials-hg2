@@ -88,7 +88,7 @@ function update_chase_camera(target_pos)
 end
 
 -- game loop
-while not keyboard:Down(hg.K_Escape) do
+while not keyboard:Down(hg.K_Escape) and hg.IsWindowOpen(win) do
 	dt = hg.TickClock()  -- tick clock, retrieve elapsed clock since last call
 
 	-- update mouse/keyboard devices

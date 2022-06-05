@@ -15,7 +15,7 @@ cube_mdl = hg.CreateCubeModel(vtx_layout, 1, 1, 1)
 cube_prg = hg.LoadProgramFromFile('resources_compiled/shaders/mdl')
 
 -- main loop
-while not hg.ReadKeyboard():Key(hg.K_Escape) do
+while not hg.ReadKeyboard():Key(hg.K_Escape) and hg.IsWindowOpen(win) do
 	render_was_reset, res_x, res_y = hg.RenderResetToWindow(win, res_x, res_y, hg.RF_VSync | hg.RF_MSAA4X | hg.RF_MaxAnisotropy)
 	if render_was_reset then
 		print(string.format('Render reset to %dx%d', res_x, res_y))

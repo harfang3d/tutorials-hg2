@@ -21,7 +21,7 @@ imgui_view_clear_color = hg.Color(0, 0, 0)
 imgui_clear_color_preset = 0
 
 # main loop
-while not hg.ReadKeyboard().Key(hg.K_Escape):
+while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
 	dt = hg.TickClock()
 
 	# ImGui frame

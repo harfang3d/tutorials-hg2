@@ -72,7 +72,7 @@ text_uniform_values = {hg.MakeUniformSetValue('u_color', hg.Vec4(1, 1, 0.5))}
 text_render_state = hg.ComputeRenderState(hg.BM_Alpha, hg.DT_Always, hg.FC_Disabled)
 
 -- main loop
-while true do
+while hg.IsWindowOpen(win) do
 	state = hg.ReadKeyboard()
 
 	if state:Key(hg.K_S) then

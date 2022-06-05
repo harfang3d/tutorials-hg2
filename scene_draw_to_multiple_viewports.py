@@ -47,7 +47,7 @@ viewports = [
 ]
 
 # main loop
-while not hg.ReadKeyboard().Key(hg.K_Escape):
+while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
 	dt = hg.TickClock()
 
 	# animate yellow cube & update scene once for all viewports
