@@ -1,6 +1,6 @@
 # HARFANG® Tutorials
 
-These **tutorials** demonstrate the usage of the HARFANG API in **Python** and **Lua**.
+These **tutorials** demonstrate the usage of the HARFANG API in **Python**, **Go** and **Lua**.
 
 To run the tutorials:
 
