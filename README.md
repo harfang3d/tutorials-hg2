@@ -17,6 +17,10 @@ You can now execute the tutorials from the folder you unzipped them to.
 ```bash
 D:\tutorials-hg2>python draw_lines.py
 ```
+or
+```bash
+D:\tutorials-hg2>go run draw_lines.go
+```
 
 Alternatively, you can open the tutorial folder using [Visual Studio Code](https://code.visualstudio.com/) and use the provided debug targets to run the tutorials.
 
