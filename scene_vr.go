@@ -4,8 +4,10 @@ import (
 	hg "github.com/harfang3d/harfang-go/v3"
 )
 
+var prg_ref *hg.PipelineProgramRef
+
 // Create materials
-func create_material(ubc *hg.Vec4, orm *hg.Vec4, prg_ref *hg.PipelineProgramRef) *hg.Material {
+func create_material(ubc *hg.Vec4, orm *hg.Vec4) *hg.Material {
 	mat := hg.NewMaterial()
 	hg.SetMaterialProgram(mat, prg_ref)
 	hg.SetMaterialValueWithVec4V(mat, "uBaseOpacityColor", ubc)
@@ -16,6 +18,9 @@ func create_material(ubc *hg.Vec4, orm *hg.Vec4, prg_ref *hg.PipelineProgramRef)
 func main() {
 	hg.InputInit()
 	hg.WindowSystemInit()
+
+	hg.SetLogLevel(hg.LLAll)
+	hg.SetLogDetailed(true)
 
 	res_x, res_y := int32(1280), int32(720)
 	win := hg.RenderInitWithWindowTitleWidthHeightResetFlags("Harfang - OpenVR Scene", res_x, res_y, hg.RFVSync|hg.RFMSAA4X)
@@ -44,20 +49,20 @@ func main() {
 	ground_ref := res.AddModel("ground", ground_mdl)
 
 	// Load shader
-	prg_ref := hg.LoadPipelineProgramRefFromAssets("core/shader/pbr.hps", res, hg.GetForwardPipelineInfo())
+	prg_ref = hg.LoadPipelineProgramRefFromAssets("core/shader/pbr.hps", res, hg.GetForwardPipelineInfo())
 
 	// Create scene
 	scene := hg.NewScene()
-	scene.GetCanvas().SetColor(hg.NewColorWithRGBA(255/255, 255/255, 217/255, 1))
-	scene.GetEnvironment().SetAmbient(hg.NewColorWithRGBA(15/255, 12/255, 9/255, 1))
+	scene.GetCanvas().SetColor(hg.NewColorWithRGBA(255.0/255.0, 255.0/255.0, 217.0/255.0, 1.0))
+	scene.GetEnvironment().SetAmbient(hg.NewColorWithRGBA(15.0/255.0, 12.0/255.0, 9.0/255.0, 1.0))
 
 	hg.CreateSpotLightWithDiffuseSpecularPriorityShadowTypeShadowBias(scene, hg.TransformationMat4(hg.NewVec3WithXYZ(-8, 4, -5), hg.NewVec3WithXYZ(hg.Deg(19), hg.Deg(59), 0)), 0, hg.Deg(5), hg.Deg(30), hg.ColorGetWhite(), hg.ColorGetWhite(), 10, hg.LSTMap, 0.0001)
 	hg.CreatePointLightWithDiffuseSpecularPriority(scene, hg.TranslationMat4(hg.NewVec3WithXYZ(2.4, 1, 0.5)), 10, hg.NewColorWithRGBA(94.0/255.0, 255.0/255.0, 228.0/255.0, 1.0), hg.NewColorWithRGBA(94.0/255.0, 1.0, 228.0/255.0, 1.0), 0)
 
-	mat_cube := create_material(hg.NewVec4WithXYZW(255/255, 230/255, 20/255, 1), hg.NewVec4WithXYZW(1, 0.658, 0., 1), prg_ref)
+	mat_cube := create_material(hg.NewVec4WithXYZW(255.0/255.0, 230.0/255.0, 255.0/255.0, 1), hg.NewVec4WithXYZW(1, 0.658, 0., 1))
 	hg.CreateObjectWithSliceOfMaterials(scene, hg.TransformationMat4(hg.NewVec3WithXYZ(0, 0.5, 0), hg.NewVec3WithXYZ(0, hg.Deg(70), 0)), cube_ref, hg.GoSliceOfMaterial{mat_cube})
 
-	mat_ground := create_material(hg.NewVec4WithXYZW(255/255, 120/255, 147/255, 1), hg.NewVec4WithXYZW(1, 1, 0.1, 1), prg_ref)
+	mat_ground := create_material(hg.NewVec4WithXYZW(255/255.0, 120/255.0, 147/255.0, 1), hg.NewVec4WithXYZW(1, 1, 0.1, 1))
 	hg.CreateObjectWithSliceOfMaterials(scene, hg.TranslationMat4(hg.NewVec3WithXYZ(0, 0, 0)), ground_ref, hg.GoSliceOfMaterial{mat_ground})
 
 	// Setup 2D rendering to display eyes textures
@@ -78,6 +83,8 @@ func main() {
 	quad_uniform_set_value_list.PushBack(hg.MakeUniformSetValueWithVec4V("color", hg.NewVec4WithXYZW(1, 1, 1, 1)))
 
 	quad_uniform_set_texture_list := hg.NewUniformSetTextureList()
+
+	//<-time.After(time.Second * 3)
 
 	// Main loop
 	for !hg.ReadKeyboard().Key(hg.KEscape) && hg.IsWindowOpen(win) {
