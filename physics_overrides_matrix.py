@@ -14,12 +14,16 @@ res = hg.PipelineResources()
 
 hg.ImGuiInit(10, hg.LoadProgramFromFile('resources_compiled/core/shader/imgui'), hg.LoadProgramFromFile('resources_compiled/core/shader/imgui_image'))
 
+# physics debug
+vtx_line_layout = hg.VertexLayoutPosFloatColorUInt8()
+line_shader = hg.LoadProgramFromFile("resources_compiled/shaders/pos_rgb")
+
 # create models
 vtx_layout = hg.VertexLayoutPosFloatNormUInt8()
 
-cube_mdl = hg.CreateCubeModel(vtx_layout, 0.5, 0.5, 0.5)
+cube_mdl = hg.CreateCubeModel(vtx_layout, 1, 1, 1)
 cube_ref = res.AddModel('cube', cube_mdl)
-ground_mdl = hg.CreateCubeModel(vtx_layout, 50, 0.01, 50)
+ground_mdl = hg.CreateCubeModel(vtx_layout, 100, 0.02, 100)
 ground_ref = res.AddModel('ground', ground_mdl)
 
 prg_ref = hg.LoadPipelineProgramRefFromFile('resources_compiled/core/shader/default.hps', res, hg.GetForwardPipelineInfo())
@@ -30,8 +34,13 @@ mat = hg.CreateMaterial(prg_ref, 'uDiffuseColor', hg.Vec4(0.5, 0.5, 0.5), 'uSpec
 # setup scene
 scene = hg.Scene()
 
-cam = hg.CreateCamera(scene, hg.TransformationMat4(hg.Vec3(0, 1.5, -5), hg.Deg3(5, 0, 0)), 0.01, 1000)
+cam_mat = hg.TransformationMat4(hg.Vec3(0, 1.5, -5), hg.Deg3(5, 0, 0))
+cam = hg.CreateCamera(scene, cam_mat, 0.01, 1000)
 scene.SetCurrentCamera(cam)
+view_matrix = hg.InverseFast(cam_mat)
+c = cam.GetCamera()
+projection_matrix = hg.ComputePerspectiveProjectionMatrix(c.GetZNear(), c.GetZFar(), hg.FovToZoomFactor(c.GetFov()), hg.Vec2(res_x / res_y, 1))
+
 
 lgt = hg.CreatePointLight(scene, hg.TranslationMat4(hg.Vec3(3, 4, -6)), 0)
 
@@ -50,9 +59,21 @@ mouse, keyboard = hg.Mouse(), hg.Keyboard()
 while not keyboard.Pressed(hg.K_Escape) and hg.IsWindowOpen(win):
 	keyboard.Update()
 	mouse.Update()
+	dt = hg.TickClock()
+
+	# scene view
+	view_id = 0
+	hg.SceneUpdateSystems(scene, clocks, dt, physics, hg.time_from_sec_f(1 / 60), 1)
+	view_id, _ = hg.SubmitSceneToPipeline(view_id, scene, hg.IntRect(0, 0, res_x, res_y), True, pipeline, res)
+
+	# Debug physics display
+	hg.SetViewClear(view_id, 0, 0, 1.0, 0)
+	hg.SetViewRect(view_id, 0, 0, res_x, res_y)
+	hg.SetViewTransform(view_id, view_matrix, projection_matrix)
+	rs = hg.ComputeRenderState(hg.BM_Opaque, hg.DT_Disabled, hg.FC_Disabled)
+	physics.RenderCollision(view_id, vtx_line_layout, line_shader, rs, 0)
 
 	# ImGui view
-	dt = hg.TickClock()
 	hg.ImGuiBeginFrame(res_x, res_y, dt, mouse.GetState(), keyboard.GetState())
 
 	if hg.ImGuiBegin('Transform and Physics', True, hg.ImGuiWindowFlags_AlwaysAutoResize):
@@ -82,10 +103,6 @@ while not keyboard.Pressed(hg.K_Escape) and hg.IsWindowOpen(win):
 	hg.ImGuiEnd()
 
 	hg.ImGuiEndFrame(255)
-
-	# scene view
-	hg.SceneUpdateSystems(scene, clocks, dt, physics, hg.time_from_sec_f(1 / 60), 1)
-	hg.SubmitSceneToPipeline(0, scene, hg.IntRect(0, 0, res_x, res_y), True, pipeline, res)
 
 	hg.Frame()
 	hg.UpdateWindow(win)
