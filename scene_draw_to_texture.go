@@ -28,7 +28,7 @@ func main() {
 	color := hg.GetColorTexture(frame_buffer)
 
 	// create the cube model
-	vtx_layout := hg.VertexLayoutPosFloatNormUInt8TexCoord0UInt8()
+	vtx_layout := hg.VertexLayoutPosFloatTexCoord0UInt8()
 
 	cube_mdl := hg.CreateCubeModel(vtx_layout, 1, 1, 1)
 	res.AddModel("cube", cube_mdl)
