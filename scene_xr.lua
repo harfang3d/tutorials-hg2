@@ -26,9 +26,9 @@ eye_framebuffers = hg.OpenXRCreateEyeFrameBuffer(hg.OXRAA_MSAA4x)
 vtx_layout = hg.VertexLayoutPosFloatNormUInt8()
 
 cube_mdl = hg.CreateCubeModel(vtx_layout, 1, 1, 1)
-cube_ref = res.AddModel('cube', cube_mdl)
+cube_ref = res:AddModel('cube', cube_mdl)
 ground_mdl = hg.CreateCubeModel(vtx_layout, 50, 0.01, 50)
-ground_ref = res.AddModel('ground', ground_mdl)
+ground_ref = res:AddModel('ground', ground_mdl)
 
 -- Load shader
 prg_ref = hg.LoadPipelineProgramRefFromAssets('core/shader/pbr.hps', res, hg.GetForwardPipelineInfo())
@@ -108,7 +108,7 @@ while not hg.ReadKeyboard():Key(hg.K_Escape) and hg.IsWindowOpen(win) do
     vs = hg.ComputeOrthographicViewState(hg.TranslationMat4(hg.Vec3(0, 0, 0)), res_y, 0.1, 100, hg.ComputeAspectRatioX(res_x, res_y))
     hg.SetViewTransform(vid, vs.view, vs.proj)
 
-    if openxrFrameInfo.id_fbs.size() > 0 then
+    if openxrFrameInfo.id_fbs:size() > 0 then
         quad_uniform_set_texture_list:clear()
         quad_uniform_set_texture_list:push_back(hg.MakeUniformSetTexture("s_tex", hg.OpenXRGetColorTextureFromId(eye_framebuffers, openxrFrameInfo, 0), 0))
         hg.SetT(quad_matrix, hg.Vec3(eye_t_x, 0, 1))
