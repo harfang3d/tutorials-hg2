@@ -19,7 +19,7 @@ func main() {
 
     mdl_builder := hg.NewModelBuilder()
 
-    // Below are the 6 faces of the cube model, with 4 vertices declared for each face, that are added as 2 triangles to make a complete cubic face
+    // Below are the 6 faces of the cube model, with 4 vertices declared for each face, that are added as 2 triangles to make a complete quad face
 
     // -
     vertex0 := hg.NewVertex() // Vertex constructor
@@ -47,7 +47,7 @@ func main() {
     d := mdl_builder.AddVertex(vertex3)
 
     mdl_builder.AddTriangle(d, c, b) // Adding the first triangle of the current face
-    mdl_builder.AddTriangle(b, a, d) // Second one
+    mdl_builder.AddTriangle(b, a, d) // Second triangle
 
     // +
     vertex0 = hg.NewVertex()
@@ -189,7 +189,7 @@ func main() {
     mdl_builder.AddTriangle(a, b, c)
     mdl_builder.AddTriangle(a, c, d)
 
-    cube_mdl := mdl_builder.MakeModel(vtx_layout) // Create the actuel cube model
+    cube_mdl := mdl_builder.MakeModel(vtx_layout) // Create the actual cube model
 
     ground_mdl := hg.CreatePlaneModel(vtx_layout, 5, 5, 1, 1)
 

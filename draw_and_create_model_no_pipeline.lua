@@ -14,7 +14,7 @@ vtx_layout = hg.VertexLayoutPosFloatNormUInt8()
 
 mdl_builder = hg.ModelBuilder()
 
--- Below are the 6 faces of the cube model, with 4 vertices declared for each face, that are added as 2 triangles to make a complete cubic face
+-- Below are the 6 faces of the cube model, with 4 vertices declared for each face, that are added as 2 triangles to make a complete quad face
 
 -- -
 vertex0 = hg.Vertex() -- Vertex constructor
@@ -42,7 +42,7 @@ vertex3.uv0 = hg.Vec2(1, 0)
 d = mdl_builder:AddVertex(vertex3)
 
 mdl_builder:AddTriangle(d, c, b) -- Adding the first triangle of the current face
-mdl_builder:AddTriangle(b, a, d) -- Second one
+mdl_builder:AddTriangle(b, a, d) -- Second triangle
 
 -- +
 vertex0 = hg.Vertex()
