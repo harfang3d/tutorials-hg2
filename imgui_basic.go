@@ -21,6 +21,7 @@ func main() {
 
 	// main loop
 	for !hg.ReadKeyboard().Key(hg.KEscape) && hg.IsWindowOpen(win) {
+		hg.RenderResetToWindow(win, &res_x, &res_y)
 
 		hg.ImGuiBeginFrame(res_x, res_y, hg.TickClock(), hg.ReadMouse(), hg.ReadKeyboard())
 

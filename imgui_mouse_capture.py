@@ -19,6 +19,7 @@ mouse = hg.Mouse()
 keyboard = hg.Keyboard()
 
 while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
+	render_was_reset, res_x, res_y = hg.RenderResetToWindow(win, res_x, res_y, hg.RF_VSync)
 	mouse.Update()
 	keyboard.Update()
 
