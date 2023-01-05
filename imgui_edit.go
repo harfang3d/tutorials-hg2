@@ -28,6 +28,7 @@ func main() {
 
 	// main loop
 	for !hg.ReadKeyboard().Key(hg.KEscape) && hg.IsWindowOpen(win) {
+		hg.RenderResetToWindow(win, &res_x, &res_y)
 		dt := hg.TickClock()
 
 		// ImGui frame

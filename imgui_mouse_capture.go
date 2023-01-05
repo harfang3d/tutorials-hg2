@@ -20,6 +20,7 @@ func main() {
 	keyboard := hg.NewKeyboard()
 
 	for !hg.ReadKeyboard().Key(hg.KEscape) && hg.IsWindowOpen(win) {
+		hg.RenderResetToWindow(win, &res_x, &res_y)
 		mouse.Update()
 		keyboard.Update()
 
