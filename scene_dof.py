@@ -26,8 +26,8 @@ pipeline_aaa = hg.CreateForwardPipelineAAAFromAssets("core", pipeline_aaa_config
 pipeline_aaa_config.sample_count = 1
 target_dof_focus_point = 3.5
 target_dof_focus_length = 2.0
-pipeline_aaa_config.dof_focus_point = target_dof_focus_point
-pipeline_aaa_config.dof_focus_length = target_dof_focus_length
+pipeline_aaa_config.dof_focus_point = target_dof_focus_point # Distance to the focus point (in meters)
+pipeline_aaa_config.dof_focus_length = target_dof_focus_length # Depth of field (in meters); smaller values result in a narrower focused area.
 
 # main loop
 frame = 0
