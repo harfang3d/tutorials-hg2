@@ -1,6 +1,6 @@
 # HARFANG® Tutorials
 
-These **tutorials** demonstrate the usage of the HARFANG API in **Python**, **Go** and **Lua**.
+These **tutorials** demonstrate the usage of the HARFANG API in **Python** and **Lua**.
 
 To run the tutorials:
 
@@ -19,7 +19,7 @@ D:\tutorials-hg2>python draw_lines.py
 ```
 or
 ```bash
-D:\tutorials-hg2>go run draw_lines.go
+D:\tutorials-hg2>lua draw_lines.lua
 ```
 
 Alternatively, you can open the tutorial folder using [Visual Studio Code](https://code.visualstudio.com/) and use the provided debug targets to run the tutorials.
