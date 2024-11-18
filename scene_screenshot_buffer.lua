@@ -2,7 +2,6 @@
 -- URL : https://www.cgtrader.com/3d-models/vehicle/part/toyota-2jz-gte-engine-2932b715-2f42-4ecd-93ce-df9507c67ce8
 
 hg = require("harfang")
-
 hg.InputInit()
 hg.WindowSystemInit()
 
@@ -25,8 +24,6 @@ local tex_readback = hg.CreateTexture(tex_size, tex_size, "readback", hg.TF_Read
 scene = hg.Scene()
 ret = hg.LoadSceneFromAssets("car_engine/engine.scn", scene, res, hg.GetForwardPipelineInfo())
 
-assert(ret)
-
 local state = "none"
 
 local frame = 0
@@ -43,9 +40,6 @@ plane_prg = hg.LoadProgramFromAssets('shaders/texture')
 while not hg.ReadKeyboard():Key(hg.K_Escape) and hg.IsWindowOpen(win) do
 	dt = hg.TickClock()
 
-	trs = scene:GetNode('engine_master'):GetTransform()
-	trs:SetRot(trs:GetRot() + hg.Vec3(0, hg.Deg(15) * hg.time_to_sec_f(dt), 0))
-
     if(hg.ReadKeyboard():Key(hg.K_Space) and state == "none") then
         state = "capture"
         frame_count_capture, view_id = hg.CaptureTexture(view_id, res, tex_color_ref, tex_readback, picture)
@@ -61,13 +55,13 @@ while not hg.ReadKeyboard():Key(hg.K_Escape) and hg.IsWindowOpen(win) do
 
     view_id = 0
 	view_id = hg.SubmitSceneToPipeline(view_id, scene, hg.IntRect(0, 0, res_x, res_y), true, pipeline, res, frame_buffer.handle)
-
+	
 	hg.SetViewPerspective(view_id, 0, 0, res_x, res_y, hg.TranslationMat4(hg.Vec3(0, 0, -1.8)))
-
+	
 	val_uniforms = {hg.MakeUniformSetValue('color', hg.Vec4(1, 1, 1, 1))} 
 	tex_uniforms = {hg.MakeUniformSetTexture('s_tex', tex_color, 0)}
-
-	hg.DrawModel(view_id, plane_mdl, plane_prg, val_uniforms, tex_uniforms, hg.TransformationMat4(hg.Vec3(0, 0, 0), hg.Vec3(-math.pi/2,0, 0)))
+	
+	hg.DrawModel(view_id, plane_mdl, plane_prg, val_uniforms, tex_uniforms, hg.TransformationMat4(hg.Vec3(0, 0, 0), hg.Vec3(math.pi / 2, 0, math.pi)))
 
 	frame = hg.Frame()
 	hg.UpdateWindow(win)
