@@ -19,7 +19,7 @@
 			"stopOnEntry": false,
 			"program": "${file}",
 			"cwd": "${workspaceFolder}/",
-			"luaexe": "d:/harfang/hg_lua/lua.exe",
+			"luaexe": "C:/works/Harfang/lua/hg_lua-win-x64-3.2.7/lua.exe",
 		},
 		{
 			"name": "Go: Current file",
