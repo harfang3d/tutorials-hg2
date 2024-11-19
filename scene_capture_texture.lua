@@ -5,7 +5,7 @@ hg.InputInit()
 hg.WindowSystemInit()
 
 res_x, res_y, tex_size = 1024, 1024, 1024
-win = hg.RenderInit('Scene Capture Texture', res_x, res_y, hg.RF_VSync | hg.RF_MSAA4X)
+win = hg.RenderInit('Scene Capture Texture - Press SpaceBar to capture', res_x, res_y, hg.RF_VSync | hg.RF_MSAA4X)
 
 -- Link precompiled assets folder to the project
 hg.AddAssetsFolder("resources_compiled")
@@ -79,4 +79,3 @@ end
 
 hg.RenderShutdown()
 hg.DestroyWindow(win)
-
