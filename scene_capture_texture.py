@@ -72,7 +72,7 @@ while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
 
     # Take screenshot if CaptureTexture is ready and user pressed space
     elif(state == "capture" and frame_count_capture <= frame):
-        png_filename = "screenshots/" + ".png"
+        png_filename = "screen_capture_texture_python" + ".png"
         hg.SavePNG(picture, png_filename)
         state = "none" #Reset state to none to be able to screenshot again
 
