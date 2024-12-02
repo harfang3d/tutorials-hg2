@@ -3,45 +3,45 @@ import asyncio
 import math
 
 # make the cube rotate in async function
-async def async_cube_rotation(rotating_cube):
+async def async_cube_rotation(cube):
     global dt
-    rot = rotating_cube.GetRot()
+    rot = cube.GetRot()
     while True:
         #need to convert dt to seconds to have a decent rotation
         dt_sec = hg.time_to_sec_f(dt) * 2
         rot.y += math.pi * dt_sec
-        rotating_cube.SetRot(rot)
+        cube.SetRot(rot)
         await asyncio.sleep(dt_sec)
 
 
 # make cube translate in async function during the cube_rotation is running
-async def async_cube_translation(translating_cube, steps, speed):
+async def async_cube_translation(cube, steps, speed):
     global dt
-    pos = translating_cube.GetPos()
+    pos = cube.GetPos()
     while True:
         # Translation on +X
         for i in range(steps):
             dt_sec = hg.time_to_sec_f(dt)
             pos.x += dt_sec * speed
-            translating_cube.SetPos(pos)
+            cube.SetPos(pos)
             await asyncio.sleep(dt_sec)
         # Translation on +Z
         for i in range(steps):
             dt_sec = hg.time_to_sec_f(dt)
             pos.z += dt_sec * speed
-            translating_cube.SetPos(pos)
+            cube.SetPos(pos)
             await asyncio.sleep(dt_sec)
         # Translation on -X
         for i in range(steps):
             dt_sec = hg.time_to_sec_f(dt)
             pos.x -= dt_sec * speed
-            translating_cube.SetPos(pos)
+            cube.SetPos(pos)
             await asyncio.sleep(dt_sec)
         # Translation on -Z
         for i in range(steps):
             dt_sec = hg.time_to_sec_f(dt)
             pos.z -= dt_sec * speed
-            translating_cube.SetPos(pos)
+            cube.SetPos(pos)
             await asyncio.sleep(dt_sec)
 
 
@@ -52,6 +52,8 @@ def create_material(diffuse, specular, self, prg_ref):
 
 
 async def async_main():
+    global dt
+
     hg.InputInit()
     hg.WindowSystemInit()
 
@@ -107,13 +109,12 @@ async def async_main():
 
     # main loop
     while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
-        global dt
         dt = hg.TickClock()
 
         # update the scene
         scene.Update(dt)
 
-        view_id, pass_id = hg.SubmitSceneToPipeline(0, scene, hg.IntRect(0, 0, res_x, res_y), True, pipeline, res)
+        hg.SubmitSceneToPipeline(0, scene, hg.IntRect(0, 0, res_x, res_y), True, pipeline, res)
 
         # give async tasks time to do their job
         await asyncio.sleep(0)
