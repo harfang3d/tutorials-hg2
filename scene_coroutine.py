@@ -2,51 +2,54 @@ import harfang as hg
 import asyncio
 import math
 
-#make the cube rotate in async function
-async def get_cube_rotation(rotating_cube, dt):
-    rot_speed = (math.pi / 100.0) * dt
+# make the cube rotate in async function
+async def async_cube_rotation(rotating_cube):
+    global dt
     rot = rotating_cube.GetRot()
-    rot.y += rot_speed
-    return rot
+    while True:
+        #need to convert dt to seconds to have a decent rotation
+        dt_sec = hg.time_to_sec_f(dt) * 2
+        rot.y += math.pi * dt_sec
+        rotating_cube.SetRot(rot)
+        await asyncio.sleep(dt_sec)
 
-async def get_cube_translation(translating_cube, dt, steps=120, speed=0.01):
-    speed = dt * speed
+
+# make cube translate in async function during the cube_rotation is running
+async def async_cube_translation(translating_cube, steps, speed):
+    global dt
     pos = translating_cube.GetPos()
+    while True:
+        # Translation on +X
+        for i in range(steps):
+            dt_sec = hg.time_to_sec_f(dt)
+            pos.x += dt_sec * speed
+            translating_cube.SetPos(pos)
+            await asyncio.sleep(dt_sec)
+        # Translation on +Z
+        for i in range(steps):
+            dt_sec = hg.time_to_sec_f(dt)
+            pos.z += dt_sec * speed
+            translating_cube.SetPos(pos)
+            await asyncio.sleep(dt_sec)
+        # Translation on -X
+        for i in range(steps):
+            dt_sec = hg.time_to_sec_f(dt)
+            pos.x -= dt_sec * speed
+            translating_cube.SetPos(pos)
+            await asyncio.sleep(dt_sec)
+        # Translation on -Z
+        for i in range(steps):
+            dt_sec = hg.time_to_sec_f(dt)
+            pos.z -= dt_sec * speed
+            translating_cube.SetPos(pos)
+            await asyncio.sleep(dt_sec)
 
-    for _ in range(steps):
-        pos.x += speed
-        translating_cube.SetPos(pos)
-        await asyncio.sleep(0)
 
-    for _ in range(steps):
-        pos.z += speed
-        translating_cube.SetPos(pos)
-        await asyncio.sleep(0)
-
-    for _ in range(steps):
-        pos.x -= speed
-        translating_cube.SetPos(pos)
-        await asyncio.sleep(0)
-        
-    for _ in range(steps):
-        pos.z -= speed
-        translating_cube.SetPos(pos)
-        await asyncio.sleep(0)
-
-    return pos
 def create_material(diffuse, specular, self, prg_ref):
-	mat = hg.CreateMaterial(prg_ref, 'uDiffuseColor', diffuse, 'uSpecularColor', specular)
-	hg.SetMaterialValue(mat, 'uSelfColor', self)
-	return mat
+    mat = hg.CreateMaterial(prg_ref, 'uDiffuseColor', diffuse, 'uSpecularColor', specular)
+    hg.SetMaterialValue(mat, 'uSelfColor', self)
+    return mat
 
-async def render_scene(scene, win, pipeline, res, res_x, res_y):
-    dt = hg.TickClock()
-    scene.Update(dt)
-
-    view_id, pass_id = hg.SubmitSceneToPipeline(0, scene, hg.IntRect(0, 0, res_x, res_y), True, pipeline, res)
-
-    hg.Frame()
-    hg.UpdateWindow(win)
 
 async def async_main():
     hg.InputInit()
@@ -55,22 +58,26 @@ async def async_main():
     res_x, res_y = 1280, 720
     win = hg.RenderInit('Harfang - Scene Coroutine', res_x, res_y, hg.RF_VSync | hg.RF_MSAA4X)
 
+    # Link precompiled assets folder to the project
     hg.AddAssetsFolder('resources_compiled')
 
+    # Create Pipeline
     pipeline = hg.CreateForwardPipeline()
     res = hg.PipelineResources()
 
+    # create materials
     vtx_layout = hg.VertexLayoutPosFloatNormUInt8()
     prg_ref = hg.LoadPipelineProgramRefFromAssets('core/shader/default.hps', res, hg.GetForwardPipelineInfo())
     mat_objects = create_material(hg.Vec4(0.5, 0.5, 0.5), hg.Vec4(1, 1, 1), hg.Vec4(0, 0, 0), prg_ref)
 
+    # setup scene
     scene = hg.Scene()
     scene.canvas.color = hg.ColorI(22, 56, 76)
     scene.environment.fog_color = scene.canvas.color
     scene.environment.fog_near = 20
     scene.environment.fog_far = 80
 
-    cam_mtx = hg.TransformationMat4(hg.Vec3(0, 10, -15), hg.Deg3(30, 0, 0))
+    cam_mtx = hg.TransformationMat4(hg.Vec3(0, 7, -10), hg.Deg3(30, 0, 0))
     cam = hg.CreateCamera(scene, cam_mtx, 0.01, 3000)
     scene.SetCurrentCamera(cam)
 
@@ -81,37 +88,43 @@ async def async_main():
                         hg.ColorI(94, 255, 228))
 
     # create models
-    rotating_cube_model = hg.CreateCubeModel(vtx_layout, 1, 1, 1)
-    rotating_cube_ref = res.AddModel('rotating_cube', rotating_cube_model)
-    rotating_cube_instance = hg.CreateObject(scene, hg.TranslationMat4(hg.Vec3(0, 0, 0)), rotating_cube_ref,
+    cube_model_1 = hg.CreateCubeModel(vtx_layout, 1, 1, 1)
+    cube_ref_1 = res.AddModel('cube', cube_model_1)
+    cube_instance_1 = hg.CreateObject(scene, hg.TranslationMat4(hg.Vec3(0, 0, 0)), cube_ref_1,
                                              [mat_objects])
-    rotating_cube_transform = rotating_cube_instance.GetTransform()
+    cube_transform_1 = cube_instance_1.GetTransform()
 
-    translating_cube_model = hg.CreateCubeModel(vtx_layout, 1, 1, 1)
-    translating_cube_ref = res.AddModel('translating_cube', translating_cube_model)
-    translating_cube_instance = hg.CreateObject(scene, hg.TranslationMat4(hg.Vec3(0, 3, 0)), translating_cube_ref,
+    cube_model_2 = hg.CreateCubeModel(vtx_layout, 1, 1, 1)
+    cube_ref_2 = res.AddModel('cube', cube_model_2)
+    cube_instance_2 = hg.CreateObject(scene, hg.TranslationMat4(hg.Vec3(0, 3, 0)), cube_ref_2,
                                                 [mat_objects])
-    translating_cube_transform = translating_cube_instance.GetTransform()
+    cube_transform_2 = cube_instance_2.GetTransform()
 
-    physics = hg.SceneBullet3Physics()
-    physics.SceneCreatePhysicsFromAssets(scene)
+    # create async tasks
+    asyncio.create_task(async_cube_rotation(cube_transform_1))
+    asyncio.create_task(async_cube_translation(cube_transform_2, steps=100, speed=2.0))
+    asyncio.get_event_loop()
 
+    # main loop
     while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
+        global dt
         dt = hg.TickClock()
 
-        rotation = await get_cube_rotation(rotating_cube_transform, dt)
-        translating_cube_pos = await get_cube_translation(translating_cube_transform, dt)
+        # update the scene
+        scene.Update(dt)
 
-        rotating_cube_transform.SetRot(rotation)
-        translating_cube_transform.SetPos(translating_cube_pos)
+        view_id, pass_id = hg.SubmitSceneToPipeline(0, scene, hg.IntRect(0, 0, res_x, res_y), True, pipeline, res)
 
-        await render_scene(scene, win, pipeline, res, res_x, res_y)
+        # give async tasks time to do their job
+        await asyncio.sleep(0)
 
-        await asyncio.sleep(0.01)
+        hg.Frame()
+        hg.UpdateWindow(win)
 
     hg.DestroyForwardPipeline(pipeline)
     hg.RenderShutdown()
     hg.DestroyWindow(win)
+
 
 asyncio.run(async_main())
 
