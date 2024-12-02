@@ -3,43 +3,41 @@ import asyncio
 import math
 
 # make the cube rotate in async function
-async def async_cube_rotation(cube):
-    global dt
+async def async_cube_rotation(cube, dt_getter):
     rot = cube.GetRot()
     while True:
         #need to convert dt to seconds to have a decent rotation
-        dt_sec = hg.time_to_sec_f(dt) * 2
+        dt_sec = hg.time_to_sec_f(dt_getter()) * 2
         rot.y += math.pi * dt_sec
         cube.SetRot(rot)
         await asyncio.sleep(dt_sec)
 
 
 # make cube translate in async function during the cube_rotation is running
-async def async_cube_translation(cube, steps, speed):
-    global dt
+async def async_cube_translation(cube, dt_getter, steps, speed):
     pos = cube.GetPos()
     while True:
         # Translation on +X
         for i in range(steps):
-            dt_sec = hg.time_to_sec_f(dt)
+            dt_sec = hg.time_to_sec_f(dt_getter())
             pos.x += dt_sec * speed
             cube.SetPos(pos)
             await asyncio.sleep(dt_sec)
         # Translation on +Z
         for i in range(steps):
-            dt_sec = hg.time_to_sec_f(dt)
+            dt_sec = hg.time_to_sec_f(dt_getter())
             pos.z += dt_sec * speed
             cube.SetPos(pos)
             await asyncio.sleep(dt_sec)
         # Translation on -X
         for i in range(steps):
-            dt_sec = hg.time_to_sec_f(dt)
+            dt_sec = hg.time_to_sec_f(dt_getter())
             pos.x -= dt_sec * speed
             cube.SetPos(pos)
             await asyncio.sleep(dt_sec)
         # Translation on -Z
         for i in range(steps):
-            dt_sec = hg.time_to_sec_f(dt)
+            dt_sec = hg.time_to_sec_f(dt_getter())
             pos.z -= dt_sec * speed
             cube.SetPos(pos)
             await asyncio.sleep(dt_sec)
@@ -52,7 +50,8 @@ def create_material(diffuse, specular, self, prg_ref):
 
 
 async def async_main():
-    global dt
+    def get_dt():
+        return dt
 
     hg.InputInit()
     hg.WindowSystemInit()
@@ -103,8 +102,8 @@ async def async_main():
     cube_transform_2 = cube_instance_2.GetTransform()
 
     # create async tasks
-    asyncio.create_task(async_cube_rotation(cube_transform_1))
-    asyncio.create_task(async_cube_translation(cube_transform_2, steps=100, speed=2.0))
+    asyncio.create_task(async_cube_rotation(cube_transform_1, get_dt))
+    asyncio.create_task(async_cube_translation(cube_transform_2, get_dt, steps=100, speed=2.0))
     asyncio.get_event_loop()
 
     # main loop
