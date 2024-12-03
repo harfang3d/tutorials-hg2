@@ -56,7 +56,7 @@ async def async_main():
     hg.InputInit()
     hg.WindowSystemInit()
 
-    res_x, res_y = 1280, 720
+    res_x, res_y = 800, 800
     win = hg.RenderInit('Harfang - Scene Coroutine', res_x, res_y, hg.RF_VSync | hg.RF_MSAA4X)
 
     # Link precompiled assets folder to the project
