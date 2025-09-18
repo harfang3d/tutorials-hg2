@@ -122,12 +122,12 @@ while not keyboard.Pressed(hg.K_Escape) and hg.IsWindowOpen(win) :
 
     # add a debug cross at the screen cursor position
     lines = add_debug_cross(lines, view_pos_normalize, hg.TransformationMat4(view_pos_normalize, hg.Vec3(0, 0, 0)), 0.01)
-    # add debug crosses at the center screen, top left screen and bottom right screen position to debug
+    # add debug crosses at the center screen, top left screen and bottom right screen position
     lines = add_debug_cross(lines, view_pos_middle_normalize, hg.TransformationMat4(view_pos_middle_normalize, hg.Vec3(0, 0, 0)), 0.1)
     lines = add_debug_cross(lines, view_pos_up_left_normalize, hg.TransformationMat4(view_pos_up_left_normalize, hg.Vec3(0, 0, 0)), 0.1)
     lines = add_debug_cross(lines, view_pos_down_right_normalize, hg.TransformationMat4(view_pos_down_right_normalize, hg.Vec3(0, 0, 0)), 0.1)
 
-    # add a line to display the raycast from the cursor screen pos to the 3d position
+    # add a line starting at the origin position (i.e 1 meter in front of the camera) and ending to the mouse cursor position in the 3D space
     direction_line = [hg.Vec3(0, 1.5, -5), view_pos, hg.Color.Blue]
     lines.append(direction_line)
 
