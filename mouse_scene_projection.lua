@@ -8,7 +8,7 @@ function draw_line(pos_a, pos_b, line_color, vid, vtx_line_layout, line_shader)
 	hg.DrawLines(vid, vtx, line_shader)
 end
 
--- add_debug_cross allow to add lines to draw a cross and append them to lines structure. Those lines will be drawn at the end of the main loop by draw_line()
+-- add_debug_cross allows to create lines to draw a cross and append them to the "lines" structure. These lines will be drawn at the end of the main loop by draw_line()
 function add_debug_cross(lines, pos, world, size)
     table.insert(lines, {pos_a = pos + hg.GetX(world) * size, pos_b = pos - hg.GetX(world) * size, color = hg.Color.Red})
     table.insert(lines, {pos_a = pos + hg.GetY(world) * size, pos_b = pos - hg.GetY(world) * size, color = hg.Color.Green})
@@ -39,7 +39,7 @@ end
 
 -- Main screen and window init
 mode_list = {hg.WV_Windowed, hg.WV_Fullscreen, hg.WV_Undecorated, hg.WV_FullscreenMonitor1, hg.WV_FullscreenMonitor2, hg.WV_FullscreenMonitor3}
-win = hg.NewWindow('Poc mouse raycast', res_x, res_y, 32, mode_list[3])
+win = hg.NewWindow('Mouse scene projection', res_x, res_y, 32, mode_list[3])
 hg.RenderInit(win)
 hg.RenderReset(res_x, res_y, hg.RF_VSync | hg.RF_MSAA4X)
 
@@ -78,7 +78,7 @@ screen_pos_down_right = hg.Vec3(res_x, 0, 1.0)
 while not keyboard:Pressed(hg.K_Escape) and hg.IsWindowOpen(win) do
     dt = hg.TickClock()
 
-    -- Lines list containing the lines to draw in the viewport
+    -- List containing the lines to draw in the viewport
     lines = {}
 
     -- Input updates and get mouse cursor pos
@@ -87,7 +87,6 @@ while not keyboard:Pressed(hg.K_Escape) and hg.IsWindowOpen(win) do
 
     mouse_x, mouse_y = mouse:X(), mouse:Y()
 
-    -- Raycast the mouse cursor in the 3d space
     cursor_screen_pos = hg.Vec3(mouse_x, mouse_y, 1)
     resolution = hg.Vec2(res_x, res_y)
 
@@ -127,7 +126,7 @@ while not keyboard:Pressed(hg.K_Escape) and hg.IsWindowOpen(win) do
 
     -- add a debug cross at the screen cursor position
     lines = add_debug_cross(lines, view_pos_normalize, hg.TransformationMat4(view_pos_normalize, hg.Vec3(0, 0, 0)), 0.01)
-    -- add debug crosses at the center screen, top left screen and bottom roght screen position to debug
+    -- add debug crosses at the center screen, top left screen and bottom right screen position to debug
     lines = add_debug_cross(lines, view_pos_middle_normalize, hg.TransformationMat4(view_pos_middle_normalize, hg.Vec3(0, 0, 0)), 0.1)
     lines = add_debug_cross(lines, view_pos_up_left_normalize, hg.TransformationMat4(view_pos_up_left_normalize, hg.Vec3(0, 0, 0)), 0.1)
     lines = add_debug_cross(lines, view_pos_down_right_normalize, hg.TransformationMat4(view_pos_down_right_normalize, hg.Vec3(0, 0, 0)), 0.1)
