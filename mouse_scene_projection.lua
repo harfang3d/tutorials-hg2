@@ -21,27 +21,10 @@ hg.InputInit()
 hg.WindowSystemInit()
 
 -- Monitor resolution
-res_x, res_y = 1920, 1080
+res_x, res_y = 1280, 720
 
--- get the actual monitor size from the window system
-mon_list = hg.GetMonitors()
-mon_list_size = mon_list:size()
-if mon_list_size >= 1 then
-    local _idx
-    for _idx = 0, mon_list_size - 1 do
-        local _mon_rect = hg.GetMonitorRect(mon_list:at(_idx))
-        res_x = _mon_rect.ex - _mon_rect.sx
-        res_y = _mon_rect.ey - _mon_rect.sy
-        print("Found monitor size: " .. res_x .. " x " .. res_y)
-        break
-    end
-end
-
--- Main screen and window init
-mode_list = {hg.WV_Windowed, hg.WV_Fullscreen, hg.WV_Undecorated, hg.WV_FullscreenMonitor1, hg.WV_FullscreenMonitor2, hg.WV_FullscreenMonitor3}
-win = hg.NewWindow('Mouse scene projection', res_x, res_y, 32, mode_list[3])
-hg.RenderInit(win)
-hg.RenderReset(res_x, res_y, hg.RF_VSync | hg.RF_MSAA4X)
+-- Window init
+win = hg.RenderInit('Mouse scene projection', res_x, res_y, hg.RF_VSync)
 
 -- Create and configure the pipeline for rendering
 pipeline = hg.CreateForwardPipeline()
@@ -77,6 +60,15 @@ screen_pos_down_right = hg.Vec3(res_x, 0, 1.0)
 -- Main render loop
 while not keyboard:Pressed(hg.K_Escape) and hg.IsWindowOpen(win) do
     dt = hg.TickClock()
+
+    -- Check if the window size has changed to adjust the rendering
+    render_was_reset, res_x, res_y = hg.RenderResetToWindow(win, res_x, res_y, hg.RF_VSync)
+    -- update the screen position with the new window size
+    if render_was_reset then
+        screen_pos_middle = hg.Vec3(res_x / 2, res_y / 2, 1.0)
+        screen_pos_up_left = hg.Vec3(0, res_y, 1.0)
+        screen_pos_down_right = hg.Vec3(res_x, 0, 1.0)
+    end
 
     -- List containing the lines to draw in the viewport
     lines = {}
