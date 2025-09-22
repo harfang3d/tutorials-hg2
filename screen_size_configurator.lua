@@ -1,3 +1,5 @@
+-- Screen size configurator
+
 hg = require("harfang")
 
 -- Init input and window system

@@ -1,3 +1,5 @@
+# Screen size configurator
+
 import harfang as hg
 
 # Init input and window system
