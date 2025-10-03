@@ -27,6 +27,12 @@ Alternatively, you can open the tutorial folder using [Visual Studio Code](https
 **If you want to know more about HARFANG**, please visit the [official website](https://www.harfang3d.com).
 
 ## Screenshots
+* Model Builder Iso Surface
+![Model Builder Iso Surface](screenshots/model_builder_iso_surface.jpg)
+
+* Model Builder
+![Model Builder](screenshots/model_builder.jpg)
+
 * AAA Rendering Pipeline
 ![AAA rendering pipeline](screenshots/aaa.png)
 
